@@ -37,6 +37,7 @@ export class SpendingsBox extends React.Component {
     }
 
     handleSpendRemoval(spend) {
+        debugger;
         const currentSpendings = this.state.data,
             indexToRemove = currentSpendings.indexOf(spend);
 
@@ -68,7 +69,7 @@ export class SpendingsList extends React.Component {
                     name={spend.name}
                     price={spend.price}
                     key={Math.floor(Math.random() * 100)}
-                    onSpendRemove={this.props.onSpendRemove.bind(this)}
+                    onSpendRemove={this.props.onSpendRemove.bind(this, spend)}
                 ></Spend>
             );
         });
