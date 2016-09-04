@@ -1,10 +1,13 @@
-import {SpendingsBox}from './spend';
-import ReactDOM from 'react-dom';
+import {Spendings}from './spend';
+import {render} from 'react-dom';
 import React from 'react';
+import {Router, Route, browserHistory} from 'react-router'
 
-ReactDOM.render(
-    <div>
-        <SpendingsBox />
-    </div>,
+render(
+    (
+        <Router history={browserHistory}>
+            <Route path="/(:title)" component={Spendings}/>
+        </Router>
+    ),
     document.getElementById('appContainer')
 );

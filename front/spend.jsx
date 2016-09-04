@@ -1,5 +1,23 @@
 import React from 'react';
 import spendings from 'models/spendings';
+import {Link} from 'react-router';
+
+export class Spendings extends React.Component {
+    render() {
+        return(
+            <div>
+                <h1>{this.props.params.title || 'All'}</h1>
+                <ul role="nav">
+                    <li><Link to="/" activeStyle={{ color: 'red' }}>All</Link></li>
+                    <li><Link to="/daily" activeStyle={{ color: 'red' }}>Daily</Link></li>
+                    <li><Link to="/weekly" activeStyle={{ color: 'red' }}>Weekly</Link></li>
+                    <li><Link to="/monthly" activeStyle={{ color: 'red' }}>Monthly</Link></li>
+                </ul>
+                <SpendingsBox/>
+            </div>
+        )
+    }
+}
 
 export class SpendingsBox extends React.Component {
     constructor(props) {
