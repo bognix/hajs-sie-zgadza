@@ -18,10 +18,24 @@ export class SpendingsBox extends React.Component {
         this.setState({data: currentSpendings.concat([spend])});
     }
 
+    handleSpendRemoval(spend) {
+        const currentSpendings = this.state.data,
+            indexToRemove = currentSpendings.indexOf(spend);
+
+        currentSpendings.splice(indexToRemove, 1);
+
+        this.setState({
+            data: currentSpendings
+        });
+    }
+
     render() {
         return (
             <div className="spendings-container">
-                <SpendingsList data={this.state.data}></SpendingsList>
+                <SpendingsList
+                    data={this.state.data}
+                    onSpendRemove={this.handleSpendRemoval.bind(this)}
+                ></SpendingsList>
                 <SpendForm onSpendSubmit={this.handleSpendSubmit.bind(this)}/>
             </div>
         )
@@ -30,9 +44,14 @@ export class SpendingsBox extends React.Component {
 
 export class SpendingsList extends React.Component {
     getSpendings() {
-        return this.props.data.map(function (spend) {
+        return this.props.data.map((spend) => {
             return (
-                <Spend name={spend.name} price={spend.price} key={Math.floor(Math.random() * 100)}></Spend>
+                <Spend
+                    name={spend.name}
+                    price={spend.price}
+                    key={Math.floor(Math.random() * 100)}
+                    onSpendRemove={this.props.onSpendRemove.bind(this)}
+                ></Spend>
             );
         });
     }
@@ -46,7 +65,10 @@ export class SpendingsList extends React.Component {
 
 export class Spend extends React.Component {
     render() {
-        return <div>{this.props.name}: {this.props.price}</div>
+        return <div>
+            <span>{this.props.name}: {this.props.price}</span>
+            <button onClick={this.props.onSpendRemove}>-</button>
+        </div>
     }
 }
 
