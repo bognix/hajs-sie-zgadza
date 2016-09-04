@@ -6,7 +6,7 @@ module.exports = {
     module: {
         loaders: [
             {
-                test: /\.jsx/,
+                test: /\.js*/,
                 loader: 'babel-loader',
                 exclude: /node_modules/,
                 query: {
@@ -16,7 +16,11 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: ['', '.js', '.jsx', '.json']
+        extensions: ['', '.js', '.jsx', '.json'],
+        modulesDirectories: [
+            'front',
+            'node_modules'
+        ]
     },
     devtool: ['source-map']
 };
