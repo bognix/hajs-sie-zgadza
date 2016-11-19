@@ -1,5 +1,5 @@
 import React from 'react';
-import spendings from 'models/spendings';
+import spendings from 'models/daily';
 import {Link} from 'react-router';
 
 export class Spendings extends React.Component {
@@ -37,7 +37,6 @@ export class SpendingsBox extends React.Component {
     }
 
     handleSpendRemoval(spend) {
-        debugger;
         const currentSpendings = this.state.data,
             indexToRemove = currentSpendings.indexOf(spend);
 

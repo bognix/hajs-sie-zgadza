@@ -1,8 +1,17 @@
 var path = require('path');
 
 module.exports = {
-    entry: './front/app.jsx',
-    output: { path: __dirname, filename: 'bundle.js' },
+    entry: [
+        'webpack/hot/dev-server',
+        'webpack-hot-middleware/client',
+        './front/app.jsx'
+    ],
+    output: {
+        path: '/',
+        filename: 'bundle.js',
+        publicPath: 'http://localhost:3000/scripts/'
+    },
+    plugins: [],
     module: {
         loaders: [
             {
