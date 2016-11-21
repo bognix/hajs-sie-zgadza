@@ -6,7 +6,25 @@ const express = require('express'),
     webpackDevMiddleware = require('webpack-dev-middleware'),
     webpackHotMiddleware = require('webpack-hot-middleware'),
     config = require('./../webpack.config'),
-    path = require('path');
+    path = require('path'),
+    cookieParser = require('cookie-parser'),
+    cookieSession = require('cookie-session'),
+    handlebars = require('express-handlebars');
+
+app.engine('.hbs', handlebars({
+    defaultLayout: 'index',
+    extname: '.hbs'
+}));
+app.set('view engine', '.hbs');
+
+app.use(cookieSession({
+    name: 'session',
+    keys: ['123'],
+    // Cookie Options
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+}));
+
+app.use(cookieParser());
 
 auth(passport);
 app.use(passport.initialize());
@@ -22,15 +40,21 @@ app.use(webpackHotMiddleware(compiler, {
     log: console.log
 }));
 
-app.get('/', function(req,res) {
-    res.sendFile(path.join(__dirname + '/index.html'));
+app.get('/', function (req, res) {
+    res.cookie('token', req.session.token);
+    res.cookie('user', req.session.userDisplayName);
+    res.render('index', {
+        layout: false
+    });
 });
 
 app.get('/auth/google', passport.authenticate('google', {scope: ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/spreadsheets']}));
 
 app.get('/auth/google/callback',
-    passport.authenticate('google', { failureRedirect: '/' }),
-    function(req, res) {
+    passport.authenticate('google', {failureRedirect: '/'}),
+    function (req, res) {
+        req.session.token = req.user.token;
+        req.session.userDisplayName = req.user.profile.displayName;
         res.redirect('/');
     });
 

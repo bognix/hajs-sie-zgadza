@@ -18,9 +18,10 @@ module.exports = function (passport) {
         },
         function (token, refreshToken, profile, done) {
             console.log('user logged in');
-            console.log(profile);
-            console.log(token);
 
-            return done(null, profile);
+            return done(null, {
+                profile: profile,
+                token: token
+            });
         }));
 };

@@ -4,8 +4,12 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "cookie-parser": "^1.4.3",
+    "cookie-session": "^2.0.0-alpha.2",
     "express": "^4.14.0",
+    "express-handlebars": "^3.0.0",
     "googleapis": "^14.2.0",
+    "handlebars": "^4.0.6",
     "passport": "^0.3.2",
     "passport-google-oauth": "^1.0.0",
     "react": "^15.3.1",
