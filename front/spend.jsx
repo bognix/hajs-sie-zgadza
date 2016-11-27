@@ -1,6 +1,7 @@
 import React from 'react';
 import spendings from 'models/daily';
 import {Link} from 'react-router';
+import {getAll} from 'google-sheets/sheet';
 
 export class Spendings extends React.Component {
     render() {
@@ -28,6 +29,7 @@ export class SpendingsBox extends React.Component {
     }
 
     componentDidMount() {
+        getAll();
         this.setState({data: spendings})
     }
 

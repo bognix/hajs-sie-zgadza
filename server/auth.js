@@ -1,4 +1,4 @@
-const configAuth = require('./config/auth'),
+const configAuth = require('../config/auth'),
     GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 module.exports = function (passport) {
@@ -17,8 +17,6 @@ module.exports = function (passport) {
             callbackURL: configAuth.googleAuth.callbackURL
         },
         function (token, refreshToken, profile, done) {
-            console.log('user logged in');
-
             return done(null, {
                 profile: profile,
                 token: token
