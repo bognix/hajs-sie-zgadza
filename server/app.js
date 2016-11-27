@@ -41,14 +41,26 @@ app.use(webpackHotMiddleware(compiler, {
 }));
 
 app.get('/', function (req, res) {
-    res.cookie('token', req.session.token);
-    res.cookie('user', req.session.userDisplayName);
+    if (req.session.token) {
+        res.cookie('token', req.session.token);
+        res.cookie('user', req.session.userDisplayName);
+    } else {
+        res.cookie('token', '');
+        res.cookie('user', '');
+    }
+
     res.render('index', {
         layout: false
     });
 });
 
 app.get('/auth/google', passport.authenticate('google', {scope: ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/spreadsheets']}));
+
+app.get('/logout', function (req, res) {
+    req.logout();
+    req.session = null;
+    res.redirect('/');
+});
 
 app.get('/auth/google/callback',
     passport.authenticate('google', {failureRedirect: '/'}),

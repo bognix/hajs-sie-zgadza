@@ -8,9 +8,7 @@ render(
     (
         <div>
             <LoginControl/>
-            <Router history={browserHistory}>
-                <Route path="/(:title)" component={Spendings}/>
-            </Router>
+            <Spendings/>
         </div>
     ),
     document.getElementById('appContainer')

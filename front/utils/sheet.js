@@ -1,8 +1,14 @@
+import {getCookie} from './cookie';
+
 export function getAll() {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         fetch(createRequest({path: 'values/all!A:B'}))
             .then((response) => {
-                return response.json()
+                if (response.ok) {
+                    return response.json()
+                } else {
+                    reject(response.status)
+                }
             })
             .then((data) => {
                 const parsedData = [];
@@ -13,6 +19,9 @@ export function getAll() {
                     });
                 });
                 resolve(parsedData);
+            })
+            .catch((err) => {
+                reject(err);
             });
     });
 }
@@ -30,20 +39,5 @@ function createRequest({method='get', path=''} = {}) {
             mode: 'cors',
             cache: 'default'
         };
-        return new Request(`https://sheets.googleapis.com/v4/spreadsheets/${spreadSheetId}/${path}`, requestConfig);
-}
-
-function getCookie(cname) {
-    const name = cname + "=",
-        ca = document.cookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
+    return new Request(`https://sheets.googleapis.com/v4/spreadsheets/${spreadSheetId}/${path}`, requestConfig);
 }
