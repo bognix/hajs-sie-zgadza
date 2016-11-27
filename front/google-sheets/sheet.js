@@ -5,7 +5,14 @@ export function getAll() {
                 return response.json()
             })
             .then((data) => {
-                resolve(data);
+                const parsedData = [];
+                data.values.forEach((singleSpend) => {
+                    parsedData.push({
+                        name: singleSpend[0],
+                        price: singleSpend[1]
+                    });
+                });
+                resolve(parsedData);
             });
     });
 }
