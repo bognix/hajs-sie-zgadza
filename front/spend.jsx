@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
-import {getAll as getAllSpends, save as saveSpend, put as putSpendings} from 'utils/sheet';
+import {getAll as getAllSpends, add as addSpend, put as putSpendings} from 'utils/sheet';
 
 export class Spendings extends React.Component {
     render() {
@@ -34,7 +34,7 @@ export class SpendingsBox extends React.Component {
         this.setState({data: currentSpendings.concat([spend])});
 
         //TODO create notification about successful save
-        saveSpend(spend);
+        addSpend(spend);
     }
 
     handleSpendRemoval(spend) {

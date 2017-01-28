@@ -54,7 +54,41 @@ export function add(spend) {
 }
 
 export function put(spendings) {
+    return new Promise((resolve, reject) => {
+        const values = [];
 
+        spendings.forEach((spend) => {
+            values.push([spend.name, spend.price]);
+        });
+
+        //this has to be done to remove the row that was supposed to be removed
+        //TODO make it more robust - remove as many rows as needed
+        //- depending on what getAll method returns?
+        values.push(['','']);
+
+        fetch(createRequest({
+            method: 'post',
+            path: 'values:batchUpdate',
+            body: JSON.stringify({
+                data: {
+                    range: "A:B",
+                    values: values
+                },
+                valueInputOption: "USER_ENTERED",
+                includeValuesInResponse: false
+            })
+        }))
+        .then((response) => {
+            if (response.ok) {
+                return response.json()
+            } else {
+                reject(response.status)
+            }
+        })
+        .catch((err) => {
+            reject(err);
+        });
+    });
 }
 
 function createRequest({method='get', path='', body=null} = {}) {
