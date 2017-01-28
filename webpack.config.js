@@ -21,15 +21,16 @@ module.exports = {
                 query: {
                     presets: ['es2015', 'react']
                 }
-            }
+            },
+            { test: /\.json$/, exclude: /node_modules/, loader: 'json-loader'},
         ]
     },
     resolve: {
-        extensions: ['', '.js', '.jsx', '.json'],
-        modulesDirectories: [
+        extensions: ['.js', '.jsx', '.json'],
+        modules: [
             'front',
             'node_modules'
         ]
     },
-    devtool: ['source-map']
+    devtool: 'source-map'
 };

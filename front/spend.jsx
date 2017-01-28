@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
-import {getAll} from 'utils/sheet';
+import {getAll as getAllSpends, save as saveSpend, put as putSpendings} from 'utils/sheet';
 
 export class Spendings extends React.Component {
     render() {
@@ -21,7 +21,7 @@ export class SpendingsBox extends React.Component {
     }
 
     componentDidMount() {
-        getAll()
+        getAllSpends()
             .then((allSpendings) => {
                 this.setState({data: allSpendings});
             }).catch((err) => {
@@ -32,6 +32,9 @@ export class SpendingsBox extends React.Component {
     handleSpendSubmit(spend) {
         const currentSpendings = this.state.data;
         this.setState({data: currentSpendings.concat([spend])});
+
+        //TODO create notification about successful save
+        saveSpend(spend);
     }
 
     handleSpendRemoval(spend) {
@@ -43,6 +46,9 @@ export class SpendingsBox extends React.Component {
         this.setState({
             data: currentSpendings
         });
+
+        //TODO create notification about successful save
+        putSpendings(currentSpendings);
     }
 
     render() {
