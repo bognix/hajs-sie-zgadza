@@ -1,7 +1,7 @@
 import React from 'react';
-import {getCookie} from './utils/cookie';
+import {getCookie} from '../utils/cookie';
 
-export class LoginControl extends React.Component {
+export default class LoginControl extends React.Component {
     constructor(props) {
         super(props);
         this.state = {isLoggedIn: false}

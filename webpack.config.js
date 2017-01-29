@@ -4,7 +4,7 @@ module.exports = {
     entry: [
         'webpack/hot/dev-server',
         'webpack-hot-middleware/client',
-        './front/app.jsx'
+        './front/index.js'
     ],
     output: {
         path: '/',

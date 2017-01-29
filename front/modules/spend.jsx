@@ -1,18 +1,9 @@
 import React from 'react';
 import {Link} from 'react-router';
+import { Router, Route, hashHistory } from 'react-router'
 import {getAll as getAllSpends, add as addSpend, put as putSpendings} from 'utils/sheet';
 
 export class Spendings extends React.Component {
-    render() {
-        return (
-            <div>
-                <SpendingsBox/>
-            </div>
-        )
-    }
-}
-
-export class SpendingsBox extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -53,12 +44,32 @@ export class SpendingsBox extends React.Component {
 
     render() {
         return (
-            <div className="spendings-container">
-                <SpendingsList
+            <div>
+                <SpendingsBox
                     data={this.state.data}
                     onSpendRemove={this.handleSpendRemoval.bind(this)}
+                    onSpendSubmit={this.handleSpendSubmit.bind(this)}
+                />
+            </div>
+        )
+    }
+}
+
+// render((
+//   <Router history={hashHistory}>
+//     <Route path="/" component={App}/>
+//   </Router>
+// ), document.getElementById('app'))
+
+export class SpendingsBox extends React.Component {
+    render() {
+        return (
+            <div className="spendings-container">
+                <SpendingsList
+                    data={this.props.data}
+                    onSpendRemove={this.props.onSpendRemove}
                 ></SpendingsList>
-                <SpendForm onSpendSubmit={this.handleSpendSubmit.bind(this)}/>
+                <SpendForm onSpendSubmit={this.props.onSpendSubmit}/>
             </div>
         )
     }
