@@ -1,9 +1,7 @@
 import React from 'react';
-import {Link} from 'react-router';
-import { Router, Route, hashHistory } from 'react-router'
 import {getAll as getAllSpends, add as addSpend, put as putSpendings} from 'utils/sheet';
 
-export class Spendings extends React.Component {
+export default class Spendings extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
