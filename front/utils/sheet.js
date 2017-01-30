@@ -3,7 +3,7 @@ import sheetConfig from '../../config/sheet.json'
 
 export function getAll() {
     return new Promise(function (resolve, reject) {
-        fetch(createRequest({path: 'values/all!A:B'}))
+        fetch(createRequest({path: 'values/all!A:C'}))
             .then((response) => {
                 if (response.ok) {
                     return response.json()
@@ -16,7 +16,8 @@ export function getAll() {
                 data.values.forEach((singleSpend) => {
                     parsedData.push({
                         name: singleSpend[0],
-                        price: singleSpend[1]
+                        price: singleSpend[1],
+                        date: singleSpend[2]
                     });
                 });
                 resolve(parsedData);
@@ -36,7 +37,7 @@ export function add(spend) {
           path: 'values/A:B:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS',
           body: JSON.stringify({
               values: [
-                  [spend.name, spend.price]
+                  [spend.name, spend.price, spend.date]
               ]
           })
       }))
@@ -58,20 +59,20 @@ export function put(spendings) {
         const values = [];
 
         spendings.forEach((spend) => {
-            values.push([spend.name, spend.price]);
+            values.push([spend.name, spend.price, spend.date]);
         });
 
         //this has to be done to remove the row that was supposed to be removed
         //TODO make it more robust - remove as many rows as needed
         //- depending on what getAll method returns?
-        values.push(['','']);
+        values.push(['','', '']);
 
         fetch(createRequest({
             method: 'post',
             path: 'values:batchUpdate',
             body: JSON.stringify({
                 data: {
-                    range: "A:B",
+                    range: "A:C",
                     values: values
                 },
                 valueInputOption: "USER_ENTERED",

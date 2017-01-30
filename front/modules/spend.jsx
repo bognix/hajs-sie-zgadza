@@ -53,12 +53,6 @@ export default class Spendings extends React.Component {
     }
 }
 
-// render((
-//   <Router history={hashHistory}>
-//     <Route path="/" component={App}/>
-//   </Router>
-// ), document.getElementById('app'))
-
 export class SpendingsBox extends React.Component {
     render() {
         return (
@@ -80,7 +74,8 @@ export class SpendingsList extends React.Component {
                 <Spend
                     name={spend.name}
                     price={spend.price}
-                    key={Math.floor(Math.random() * 100)}
+                    date={spend.date}
+                    key={Math.floor(Math.random() * 1000)}
                     onSpendRemove={this.props.onSpendRemove.bind(this, spend)}
                 ></Spend>
             );
@@ -89,17 +84,30 @@ export class SpendingsList extends React.Component {
 
     render() {
         return (
-            <div className="spendings-list">{this.getSpendings()}</div>
+            <div className="spendings-list">
+                <table>
+                    <thead><tr>
+                        <th>Kiedy</th><th>Co</th><th>Za ile</th><th>Usuń</th>
+                    </tr></thead>
+                    <tbody>
+                        {this.getSpendings()}
+                    </tbody>
+                </table>
+            </div>
         )
     }
 }
 
 export class Spend extends React.Component {
     render() {
-        return <div>
-            <span>{this.props.name}: {this.props.price}</span>
-            <button onClick={this.props.onSpendRemove}>-</button>
-        </div>
+        return(
+            <tr>
+                <td>{this.props.date}</td>
+                <td>{this.props.name}</td>
+                <td>{this.props.price}</td>
+                <td><button onClick={this.props.onSpendRemove}>-</button></td>
+            </tr>
+        )
     }
 }
 
@@ -109,7 +117,8 @@ export class SpendForm extends React.Component {
 
         this.state = {
             name: '',
-            price: ''
+            price: '',
+            date: this.formatDate(new Date())
         }
     }
 
@@ -123,11 +132,21 @@ export class SpendForm extends React.Component {
         this.setState({price: e.target.value});
     }
 
+    handleDateChange(e) {
+        this.setState({date: e.target.value});
+    }
+
     handleSubmit(e) {
         e.preventDefault();
 
         this.props.onSpendSubmit(this.state);
-        this.setState({name: '', price: ''});
+        this.setState({name: '', price: '', date: this.formatDate(new Date())});
+    }
+
+    formatDate(dateObject) {
+        const month = dateObject.getMonth() + 1 < 10 ?
+            `0${dateObject.getMonth() + 1}` : dateObject.getMonth();
+        return `${dateObject.getFullYear()}-${month}-${dateObject.getDate()}`
     }
 
     render() {
@@ -137,6 +156,8 @@ export class SpendForm extends React.Component {
                        onChange={this.handleNameChange.bind(this)}/>
                 <input type="text" placeholder="ile..." value={this.state.price}
                        onChange={this.handlePriceChange.bind(this)}/>
+               <input type="date" placeholder="kiedy..." value={this.state.date}
+                      onChange={this.handleDateChange.bind(this)}/>
                 <input type="submit" value="+"/>
             </form>
         )
