@@ -68,7 +68,12 @@ app.get('/auth/google/callback',
         req.session.token = req.user.token;
         req.session.userDisplayName = req.user.profile.displayName;
         res.redirect('/');
-    });
+    }
+);
+
+app.get('/spends/*', function(req, res) {
+    res.redirect('/');
+});
 
 app.listen(3000, function () {
     console.log('Server is running on port 3000');
