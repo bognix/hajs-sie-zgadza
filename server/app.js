@@ -71,7 +71,7 @@ app.get('/auth/google/callback',
     }
 );
 
-app.get('/spends/*', function(req, res) {
+app.get('/spends', function(req, res) {
     res.redirect('/');
 });
 

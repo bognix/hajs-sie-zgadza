@@ -7,8 +7,8 @@ import Spendings from './modules/spend';
 render(
   <Router history={browserHistory}>
     <Route path="/" component={App}>
-        <IndexRedirect to="/spends/today"></IndexRedirect>
-        <Route path="/spends/:filter" component={Spendings}></Route>
+        <IndexRedirect to="/spends"></IndexRedirect>
+        <Route path="/spends" component={Spendings}></Route>
     </Route>
   </Router>,
   document.getElementById('appContainer')

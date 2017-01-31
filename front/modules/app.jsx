@@ -9,8 +9,7 @@ export default class App extends React.Component {
             <LoginControl/>
             <nav>
                 <ul>
-                    <li><Link to="/spends/today">Today</Link></li>
-                    <li><Link to="/spends/all">All</Link></li>
+                    <li><Link to="/spends">My Spends</Link></li>
                 </ul>
             </nav>
             {this.props.children}

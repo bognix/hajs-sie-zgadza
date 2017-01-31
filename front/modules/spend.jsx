@@ -1,5 +1,6 @@
 import React from 'react';
-import {getAll as getAllSpends, add as addSpend, put as putSpendings} from 'utils/sheet';
+import {add as addSpend, put as putSpendings} from 'utils/sheet';
+import store from 'store/spends';
 
 export default class Spendings extends React.Component {
     constructor(props) {
@@ -10,9 +11,9 @@ export default class Spendings extends React.Component {
     }
 
     componentDidMount() {
-        getAllSpends()
-            .then((allSpendings) => {
-                this.setState({data: allSpendings});
+        store.getTodaySpends()
+            .then((todaySpendings) => {
+                this.setState({data: todaySpendings});
             }).catch((err) => {
                 console.log(err);
             });

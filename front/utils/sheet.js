@@ -12,15 +12,7 @@ export function getAll() {
                 }
             })
             .then((data) => {
-                const parsedData = [];
-                data.values.forEach((singleSpend) => {
-                    parsedData.push({
-                        name: singleSpend[0],
-                        price: singleSpend[1],
-                        date: singleSpend[2]
-                    });
-                });
-                resolve(parsedData);
+                resolve(data);
             })
             .catch((err) => {
                 reject(err);
@@ -110,4 +102,8 @@ function createRequest({method='get', path='', body=null} = {}) {
             requestConfig.body = body;
         }
     return new Request(`https://sheets.googleapis.com/v4/spreadsheets/${spreadSheetId}/${path}`, requestConfig);
+}
+
+export default {
+    getAll
 }
