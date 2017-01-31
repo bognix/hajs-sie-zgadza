@@ -41,6 +41,26 @@ export default class Spendings extends React.Component {
         putSpendings(currentSpendings);
     }
 
+    handleDateChange(date) {
+        if (date === 'today') {
+            store.getTodaySpends()
+                .then((todaySpendings) => {
+                    this.setState({data: todaySpendings});
+                }).catch((err) => {
+                    //TODO better error handling
+                    console.log(err);
+                });
+        } else {
+            store.getAllSpends()
+                .then((allSpendings) => {
+                    this.setState({data: allSpendings});
+                }).catch((err) => {
+                    //TODO better error handling
+                    console.log(err);
+                });
+        }
+    }
+
     render() {
         return (
             <div>
@@ -49,6 +69,7 @@ export default class Spendings extends React.Component {
                     onSpendRemove={this.handleSpendRemoval.bind(this)}
                     onSpendSubmit={this.handleSpendSubmit.bind(this)}
                 />
+                <SpendingsFilter onDateChange={this.handleDateChange.bind(this)} />
             </div>
         )
     }
@@ -160,6 +181,44 @@ export class SpendForm extends React.Component {
                <input type="date" placeholder="kiedy..." value={this.state.date}
                       onChange={this.handleDateChange.bind(this)}/>
                 <input type="submit" value="+"/>
+            </form>
+        )
+    }
+}
+
+export class SpendingsFilter extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.values = {
+            today: 'today',
+            all: 'all'
+        }
+
+        this.state = {
+            date: ''
+        }
+    }
+
+    componentDidMount() {
+        this.setState({
+            date: this.values.today
+        });
+    }
+
+    handleDateChange(e) {
+        this.setState({
+            date: e.target.value
+        });
+
+        this.props.onDateChange(e.target.value);
+    }
+
+    render() {
+        return (
+            <form>
+                Today <input type="radio" name="date" value={this.values.today} checked={this.state.date === this.values.today} onChange={this.handleDateChange.bind(this)}/>
+                All <input type="radio" name="date" value={this.values.all} checked={this.state.date === this.values.all} onChange={this.handleDateChange.bind(this)}/>
             </form>
         )
     }
