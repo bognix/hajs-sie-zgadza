@@ -1,4 +1,4 @@
-import {getCookie} from './cookie';
+import {getCookie} from 'utils/cookie';
 import sheetConfig from '../../config/sheet.json'
 
 export function getAll() {
@@ -26,7 +26,7 @@ export function add(spend) {
 
       fetch(createRequest({
           method: 'post',
-          path: 'values/A:B:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS',
+          path: 'values/A:C:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS',
           body: JSON.stringify({
               values: [
                   [spend.name, spend.price, spend.date]
