@@ -6,35 +6,43 @@ export default class Spendings extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: []
+            fetchedData: []
         }
+
+        this.state.visibleData = this.state.fetchedData;
     }
 
     componentDidMount() {
         store.getTodaySpends()
             .then((todaySpendings) => {
-                this.setState({data: todaySpendings});
+                this.setState({
+                    fetchedData: todaySpendings
+                });
+
+                this.setState({
+                    visibleData: this.state.fetchedData
+                });
             }).catch((err) => {
                 console.log(err);
             });
     }
 
     handleSpendSubmit(spend) {
-        const currentSpendings = this.state.data;
-        this.setState({data: currentSpendings.concat([spend])});
+        const currentSpendings = this.state.fetchedData;
+        this.setState({fetchedDate: currentSpendings.concat([spend])});
 
         //TODO create notification about successful save
         addSpend(spend);
     }
 
     handleSpendRemoval(spend) {
-        const currentSpendings = this.state.data,
+        const currentSpendings = this.state.fetchedData,
             indexToRemove = currentSpendings.indexOf(spend);
 
         currentSpendings.splice(indexToRemove, 1);
 
         this.setState({
-            data: currentSpendings
+            fetchedDate: currentSpendings
         });
 
         //TODO create notification about successful save
@@ -45,7 +53,7 @@ export default class Spendings extends React.Component {
         if (date === 'today') {
             store.getTodaySpends()
                 .then((todaySpendings) => {
-                    this.setState({data: todaySpendings});
+                    this.setState({fetchedData: todaySpendings});
                 }).catch((err) => {
                     //TODO better error handling
                     console.log(err);
@@ -53,7 +61,7 @@ export default class Spendings extends React.Component {
         } else {
             store.getAllSpends()
                 .then((allSpendings) => {
-                    this.setState({data: allSpendings});
+                    this.setState({fetchedData: allSpendings});
                 }).catch((err) => {
                     //TODO better error handling
                     console.log(err);
@@ -61,15 +69,31 @@ export default class Spendings extends React.Component {
         }
     }
 
+    handleCategoryChange(category) {
+        if (!category) {
+            return this.setState({
+                visibleData: this.state.fetchedData
+            });
+        }
+
+        const filteredSpends = this.state.visibleData.filter((spend) => {
+            return spend.category.indexOf(category) === 0;
+        });
+
+        this.setState({
+            visibleData: filteredSpends
+        });
+    }
+
     render() {
         return (
             <div>
+                <SpendingsFilter onDateChange={this.handleDateChange.bind(this)} onCategoryChange={this.handleCategoryChange.bind(this)}/>
                 <SpendingsBox
-                    data={this.state.data}
+                    data={this.state.visibleData}
                     onSpendRemove={this.handleSpendRemoval.bind(this)}
                     onSpendSubmit={this.handleSpendSubmit.bind(this)}
                 />
-                <SpendingsFilter onDateChange={this.handleDateChange.bind(this)} />
             </div>
         )
     }
@@ -110,7 +134,7 @@ export class SpendingsList extends React.Component {
             <div className="spendings-list">
                 <table>
                     <thead><tr>
-                        <th>Kiedy</th><th>Co</th><th>Za ile</th><th>Usuń</th>
+                        <th>Kiedy</th><th>Co</th><th>Za ile</th><th>Kategoria</th><th>Usuń</th>
                     </tr></thead>
                     <tbody>
                         {this.getSpendings()}
@@ -169,8 +193,8 @@ export class SpendForm extends React.Component {
         e.preventDefault();
 
         this.props.onSpendSubmit(this.state);
-        this.firstInput.focus();
         this.setState({name: '', price: '', category: '', date: this.formatDate(new Date())});
+        this.firstInput.focus();
     }
 
     formatDate(dateObject) {
@@ -209,13 +233,15 @@ export class SpendingsFilter extends React.Component {
         }
 
         this.state = {
-            date: ''
+            date: '',
+            category: ''
         }
     }
 
     componentDidMount() {
         this.setState({
-            date: this.values.today
+            date: this.values.today,
+            category: ''
         });
     }
 
@@ -227,11 +253,19 @@ export class SpendingsFilter extends React.Component {
         this.props.onDateChange(e.target.value);
     }
 
+    handleCategoryChange(e) {
+        this.setState({
+            category: e.target.value
+        });
+        this.props.onCategoryChange(e.target.value);
+    }
+
     render() {
         return (
             <form>
                 Today <input type="radio" name="date" value={this.values.today} checked={this.state.date === this.values.today} onChange={this.handleDateChange.bind(this)}/>
                 All <input type="radio" name="date" value={this.values.all} checked={this.state.date === this.values.all} onChange={this.handleDateChange.bind(this)}/>
+            <input type="text" placeholder="filtruj kategorie..." value={this.state.category} onChange={this.handleCategoryChange.bind(this)}/>
             </form>
         )
     }
