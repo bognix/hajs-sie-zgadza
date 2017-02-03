@@ -29,7 +29,11 @@ export default class Spendings extends React.Component {
 
     handleSpendSubmit(spend) {
         const currentSpendings = this.state.fetchedData;
-        this.setState({fetchedDate: currentSpendings.concat([spend])});
+        this.setState({
+            fetchedData: currentSpendings.concat([spend])
+        });
+
+        store.update();
 
         //TODO create notification about successful save
         addSpend(spend);
@@ -53,7 +57,10 @@ export default class Spendings extends React.Component {
         if (date === 'today') {
             store.getTodaySpends()
                 .then((todaySpendings) => {
-                    this.setState({fetchedData: todaySpendings});
+                    this.setState({
+                        fetchedData: todaySpendings,
+                        visibleData: todaySpendings
+                    });
                 }).catch((err) => {
                     //TODO better error handling
                     console.log(err);
@@ -61,7 +68,7 @@ export default class Spendings extends React.Component {
         } else {
             store.getAllSpends()
                 .then((allSpendings) => {
-                    this.setState({fetchedData: allSpendings});
+                    this.setState({fetchedData: allSpendings, visibleData: allSpendings});
                 }).catch((err) => {
                     //TODO better error handling
                     console.log(err);

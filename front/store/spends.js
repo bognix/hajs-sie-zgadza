@@ -2,13 +2,13 @@ import sheet from '../utils/sheet';
 
 let allSpendsCached, todaySpendsCached;
 
-export function getTodaySpends() {
+export function getTodaySpends(forceUpdate = false) {
     return new Promise((resolve, reject) => {
-        if (todaySpendsCached) {
+        if (!forceUpdate && todaySpendsCached) {
             return resolve(todaySpendsCached);
         }
 
-        getAllSpends().then((spends) => {
+        getAllSpends(forceUpdate).then((spends) => {
             const todayString = new Date().toDateString(),
                 todaySpends = spends.filter((spend) => {
                     return new Date(spend.date).toDateString() === todayString;
@@ -23,9 +23,9 @@ export function getTodaySpends() {
     });
 }
 
-export function getAllSpends() {
+export function getAllSpends(forceUpdate = false) {
     return new Promise((resolve, reject) => {
-        if (allSpendsCached) {
+        if (!forceUpdate && allSpendsCached) {
             return resolve(allSpendsCached);
         }
 
@@ -33,7 +33,7 @@ export function getAllSpends() {
             const parsedData = [];
 
             if (!data.values) {
-                resolve(parsedData);
+                return resolve(parsedData);
             }
 
             data.values.forEach((singleSpend) => {
@@ -48,13 +48,20 @@ export function getAllSpends() {
             allSpendsCached = parsedData;
 
             return resolve(parsedData);
+
             }).catch((err) => {
                 reject(err);
             });
     });
 }
 
+export function update() {
+    //@TODO some sort of notification about update in progress
+    getTodaySpends(true);
+}
+
 export default {
     getAllSpends,
-    getTodaySpends
+    getTodaySpends,
+    update
 }
