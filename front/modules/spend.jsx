@@ -97,6 +97,7 @@ export class SpendingsList extends React.Component {
                     name={spend.name}
                     price={spend.price}
                     date={spend.date}
+                    category={spend.category}
                     key={Math.floor(Math.random() * 1000)}
                     onSpendRemove={this.props.onSpendRemove.bind(this, spend)}
                 ></Spend>
@@ -127,6 +128,7 @@ export class Spend extends React.Component {
                 <td>{this.props.date}</td>
                 <td>{this.props.name}</td>
                 <td>{this.props.price}</td>
+                <td>{this.props.category}</td>
                 <td><button onClick={this.props.onSpendRemove}>-</button></td>
             </tr>
         )
@@ -140,6 +142,7 @@ export class SpendForm extends React.Component {
         this.state = {
             name: '',
             price: '',
+            category: '',
             date: this.formatDate(new Date())
         }
     }
@@ -158,29 +161,37 @@ export class SpendForm extends React.Component {
         this.setState({date: e.target.value});
     }
 
+    handleCategoryChange(e) {
+        this.setState({category: e.target.value});
+    }
+
     handleSubmit(e) {
         e.preventDefault();
 
         this.props.onSpendSubmit(this.state);
-        this.setState({name: '', price: '', date: this.formatDate(new Date())});
+        this.setState({name: '', price: '', category: '', date: this.formatDate(new Date())});
     }
 
     formatDate(dateObject) {
         const month = dateObject.getMonth() + 1 < 10 ?
-            `0${dateObject.getMonth() + 1}` : dateObject.getMonth();
-        return `${dateObject.getFullYear()}-${month}-${dateObject.getDate()}`
+            `0${dateObject.getMonth() + 1}` : dateObject.getMonth(),
+            day = dateObject.getDate() < 10 ? `0${dateObject.getDate()}` : dateObject.getDate();
+
+        return `${dateObject.getFullYear()}-${month}-${day}`
     }
 
     render() {
         return (
             <form onSubmit={this.handleSubmit.bind(this)}>
                 <input type="text" placeholder="co..." value={this.state.name}
-                       onChange={this.handleNameChange.bind(this)}/>
+                   onChange={this.handleNameChange.bind(this)}/>
                 <input type="text" placeholder="ile..." value={this.state.price}
-                       onChange={this.handlePriceChange.bind(this)}/>
+                   onChange={this.handlePriceChange.bind(this)}/>
+               <input type="text" placeholder="kategoria..."
+                   onChange={this.handleCategoryChange.bind(this)} value={this.state.category}/>
                <input type="date" placeholder="kiedy..." value={this.state.date}
-                      onChange={this.handleDateChange.bind(this)}/>
-                <input type="submit" value="+"/>
+                  onChange={this.handleDateChange.bind(this)}/>
+              <input type="submit" value="+"/>
             </form>
         )
     }

@@ -3,7 +3,7 @@ import sheetConfig from '../../config/sheet.json'
 
 export function getAll() {
     return new Promise(function (resolve, reject) {
-        fetch(createRequest({path: 'values/all!A:C'}))
+        fetch(createRequest({path: 'values/all!A:D'}))
             .then((response) => {
                 if (response.ok) {
                     return response.json()
@@ -26,10 +26,10 @@ export function add(spend) {
 
       fetch(createRequest({
           method: 'post',
-          path: 'values/A:C:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS',
+          path: 'values/A:D:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS',
           body: JSON.stringify({
               values: [
-                  [spend.name, spend.price, spend.date]
+                  [spend.name, spend.price, spend.category, spend.date]
               ]
           })
       }))
@@ -64,7 +64,7 @@ export function put(spendings) {
             path: 'values:batchUpdate',
             body: JSON.stringify({
                 data: {
-                    range: "A:C",
+                    range: "A:D",
                     values: values
                 },
                 valueInputOption: "USER_ENTERED",

@@ -32,11 +32,16 @@ export function getAllSpends() {
         sheet.getAll().then((data) => {
             const parsedData = [];
 
+            if (!data.values) {
+                resolve(parsedData);
+            }
+
             data.values.forEach((singleSpend) => {
                 parsedData.push({
                     name: singleSpend[0],
                     price: singleSpend[1],
-                    date: singleSpend[2]
+                    category: singleSpend[2],
+                    date: singleSpend[3]
                 });
             });
 
