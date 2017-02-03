@@ -169,6 +169,7 @@ export class SpendForm extends React.Component {
         e.preventDefault();
 
         this.props.onSpendSubmit(this.state);
+        this.firstInput.focus();
         this.setState({name: '', price: '', category: '', date: this.formatDate(new Date())});
     }
 
@@ -184,7 +185,8 @@ export class SpendForm extends React.Component {
         return (
             <form onSubmit={this.handleSubmit.bind(this)}>
                 <input type="text" placeholder="co..." value={this.state.name}
-                   onChange={this.handleNameChange.bind(this)}/>
+                   onChange={this.handleNameChange.bind(this)}
+                   ref={(firstInput) => { this.firstInput = firstInput; }}/>
                 <input type="text" placeholder="ile..." value={this.state.price}
                    onChange={this.handlePriceChange.bind(this)}/>
                <input type="text" placeholder="kategoria..."
