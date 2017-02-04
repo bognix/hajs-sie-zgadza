@@ -2,9 +2,22 @@ import sheet from '../utils/sheet';
 
 let allSpendsCached, todaySpendsCached;
 
-export function getAllSpends(forceUpdate = false) {
+export function getTodaySpends(allSpends) {
+
+        const todayString = new Date().toDateString(),
+            todaySpends = allSpends.filter((spend) => {
+                return new Date(spend.date).toDateString() === todayString;
+            });
+
+        todaySpendsCached = todaySpends;
+
+        return todaySpends;
+
+}
+
+export function getAllSpends() {
     return new Promise((resolve, reject) => {
-        if (!forceUpdate && allSpendsCached) {
+        if (allSpendsCached) {
             return resolve(allSpendsCached);
         }
 
@@ -35,5 +48,6 @@ export function getAllSpends(forceUpdate = false) {
 }
 
 export default {
-    getAllSpends
+    getAllSpends,
+    getTodaySpends
 };

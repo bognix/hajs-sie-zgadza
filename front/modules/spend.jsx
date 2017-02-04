@@ -10,7 +10,7 @@ export default class Spendings extends React.Component {
 
         this.state = {
             allSpendings: [],
-            visibleSpendings: [],
+            category: '',
             selectedDate: '',
         }
 
@@ -24,11 +24,9 @@ export default class Spendings extends React.Component {
         store.getAllSpends()
             .then((allSpendings) => {
                 this.setState({
-                    visibleSpendings: allSpendings,
                     allSpendings: allSpendings,
-                    selectedDate: this.dates.all
+                    selectedDate: this.dates.today
                 });
-                console.log('bogna', this.state.selectedDate);
             }).catch((err) => {
                 console.log(err);
             });
@@ -36,11 +34,11 @@ export default class Spendings extends React.Component {
     }
 
     handleSpendSubmit(spend) {
-        const currentSpendings = this.state.visibleSpendings;
+        const currentSpendings = this.state.allSpendings;
 
         //@TODO check if spend should be added to currently visible spends
         this.setState({
-            visibleSpendings: currentSpendings.concat([spend])
+            allSpendings: currentSpendings.concat([spend])
         });
 
         //TODO create notification about successful save
@@ -49,13 +47,13 @@ export default class Spendings extends React.Component {
 
     //@FIXME this method should update all spends
     handleSpendRemoval(spend) {
-        const currentSpendings = this.state.visibleSpendings,
+        const currentSpendings = this.state.allSpendings,
             indexToRemove = currentSpendings.indexOf(spend);
 
         currentSpendings.splice(indexToRemove, 1);
 
         this.setState({
-            visibleSpendings: currentSpendings
+            allSpendings: currentSpendings
         });
 
         //TODO create notification about successful save
@@ -63,48 +61,36 @@ export default class Spendings extends React.Component {
     }
 
     handleDateChange(date) {
-        if (date === this.dates.today) {
-            store.getAllSpends()
-                .then((allSpendings) => {
-                    this.setState({
-                        visibleSpendings: allSpendings,
-                        selectedDate: this.dates.today
-                    });
-                }).catch((err) => {
-                    //TODO better error handling
-                    console.log(err);
-                });
-        } else {
-            store.getAllSpends()
-                .then((allSpendings) => {
-                    this.setState({
-                        visibleSpendings: allSpendings,
-                        selectedDate: this.dates.all
-                    });
-                }).catch((err) => {
-                    //TODO better error handling
-                    console.log(err);
-                });
-        }
+        this.setState({
+            selectedDate: date
+        });
     }
 
     handleCategoryChange(category) {
-        if (!category) {
-            return this.setState({
-                visibleSpendings: this.state.allSpendings
+        this.setState({
+            category: category
+        })
+    }
+
+    calculateVisibleSpendings() {
+        let visibleSpendings = this.state.allSpendings;
+
+        if (this.state.selectedDate === this.dates.today) {
+            visibleSpendings = store.getTodaySpends(this.state.allSpendings);
+        }
+
+        if (this.state.category) {
+            visibleSpendings = visibleSpendings.filter((spend) => {
+                return spend.category.indexOf(this.state.category) === 0;
             });
         }
 
-        const filteredSpends = this.state.visibleSpendings.filter((spend) => {
-            return spend.category.indexOf(category) === 0;
-        });
-
-        this.setState({
-            visibleSpendings: filteredSpends
-        });
+        return visibleSpendings;
     }
 
     render() {
+        const visibleSpendings = this.calculateVisibleSpendings();
+
         return (
             <div>
                 <SpendingsFilter onDateChange={this.handleDateChange.bind(this)}
@@ -113,7 +99,7 @@ export default class Spendings extends React.Component {
                  />
                 <SpendForm onSpendSubmit={this.handleSpendSubmit.bind(this)}/>
                 <SpendingsBox
-                    data={this.state.visibleSpendings}
+                    data={visibleSpendings}
                     onSpendRemove={this.handleSpendRemoval.bind(this)}
                 />
             </div>
