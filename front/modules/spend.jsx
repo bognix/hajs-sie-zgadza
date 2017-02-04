@@ -96,6 +96,7 @@ export default class Spendings extends React.Component {
                 <SpendingsFilter onDateChange={this.handleDateChange.bind(this)}
                      onCategoryChange={this.handleCategoryChange.bind(this)}
                      dates={this.dates} selectedDate={this.state.selectedDate}
+                     category={this.state.categor}
                  />
                 <SpendForm onSpendSubmit={this.handleSpendSubmit.bind(this)}/>
                 <SpendingsBox
@@ -195,9 +196,6 @@ export class SpendingsFilter extends React.Component {
     }
 
     handleCategoryChange(e) {
-        this.setState({
-            category: e.target.value
-        });
         this.props.onCategoryChange(e.target.value);
     }
 
@@ -208,7 +206,7 @@ export class SpendingsFilter extends React.Component {
                 checked={this.props.selectedDate === this.props.dates.today} onChange={this.handleDateChange}/>
                 All <input type="radio" name="date" value={this.props.dates.all}
                 checked={this.props.selectedDate === this.props.dates.all} onChange={this.handleDateChange}/>
-                <input type="text" placeholder="filtruj kategorie..." value={this.state.category} onChange={this.handleCategoryChange}/>
+                <input type="text" placeholder="filtruj kategorie..." value={this.props.category} onChange={this.handleCategoryChange}/>
             </form>
         )
     }
