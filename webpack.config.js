@@ -4,7 +4,8 @@ module.exports = {
     entry: [
         'webpack/hot/dev-server',
         'webpack-hot-middleware/client',
-        './front/scripts/index.js'
+        './front/scripts/index.js',
+        './front/styles/app.scss'
     ],
     output: {
         path: '/',
@@ -13,8 +14,7 @@ module.exports = {
     },
     plugins: [],
     module: {
-        loaders: [
-        {
+        rules: [{
             test: /\.js*/,
             loader: 'babel-loader',
             exclude: /node_modules/,
@@ -31,11 +31,12 @@ module.exports = {
         }]
     },
     resolve: {
-        extensions: ['.js', '.jsx', '.json'],
+        extensions: ['.js', '.jsx', '.json', '.scss'],
         modules: [
             'front/scripts',
             'config',
-            'node_modules'
+            'node_modules',
+            'front/styles'
         ]
     },
     devtool: 'source-map'
