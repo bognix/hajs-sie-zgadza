@@ -11,7 +11,7 @@ export default class Spendings extends React.Component {
         this.state = {
             allSpendings: [],
             category: '',
-            selectedDate: '',
+            selectedDate: ''
         }
 
         this.dates = {
@@ -21,15 +21,11 @@ export default class Spendings extends React.Component {
     }
 
     componentDidMount() {
-        store.getAllSpends()
-            .then((allSpendings) => {
-                this.setState({
-                    allSpendings: allSpendings,
-                    selectedDate: this.dates.today
-                });
-            }).catch((err) => {
-                console.log(err);
-            });
+        store.getAllSpends().then((allSpendings) => {
+            this.setState({allSpendings: allSpendings, selectedDate: this.dates.today});
+        }).catch((err) => {
+            console.log(err);
+        });
 
     }
 
@@ -52,24 +48,18 @@ export default class Spendings extends React.Component {
 
         currentSpendings.splice(indexToRemove, 1);
 
-        this.setState({
-            allSpendings: currentSpendings
-        });
+        this.setState({allSpendings: currentSpendings});
 
         //TODO create notification about successful save
         putSpendings(currentSpendings);
     }
 
     handleDateChange(date) {
-        this.setState({
-            selectedDate: date
-        });
+        this.setState({selectedDate: date});
     }
 
     handleCategoryChange(category) {
-        this.setState({
-            category: category
-        })
+        this.setState({category: category})
     }
 
     calculateVisibleSpendings() {
@@ -93,16 +83,16 @@ export default class Spendings extends React.Component {
 
         return (
             <div>
-                <SpendingsFilter onDateChange={this.handleDateChange.bind(this)}
-                     onCategoryChange={this.handleCategoryChange.bind(this)}
-                     dates={this.dates} selectedDate={this.state.selectedDate}
-                     category={this.state.categor}
-                 />
+                <SpendingsFilter
+                    onDateChange={this.handleDateChange.bind(this)}
+                    onCategoryChange={this.handleCategoryChange.bind(this)}
+                    dates={this.dates}
+                    selectedDate={this.state.selectedDate}
+                    category={this.state.categor}/>
                 <SpendForm onSpendSubmit={this.handleSpendSubmit.bind(this)}/>
                 <SpendingsBox
                     data={visibleSpendings}
-                    onSpendRemove={this.handleSpendRemoval.bind(this)}
-                />
+                    onSpendRemove={this.handleSpendRemoval.bind(this)}/>
             </div>
         )
     }
@@ -112,10 +102,7 @@ export class SpendingsBox extends React.Component {
     render() {
         return (
             <div className="spendings-container">
-                <SpendingsList
-                    data={this.props.data}
-                    onSpendRemove={this.props.onSpendRemove}
-                ></SpendingsList>
+                <SpendingsList data={this.props.data} onSpendRemove={this.props.onSpendRemove}></SpendingsList>
             </div>
         )
     }
@@ -134,9 +121,7 @@ export class SpendForm extends React.Component {
     }
 
     handleNameChange(e) {
-        this.setState({
-            name: e.target.value
-        });
+        this.setState({name: e.target.value});
     }
 
     handlePriceChange(e) {
@@ -155,23 +140,42 @@ export class SpendForm extends React.Component {
         e.preventDefault();
 
         this.props.onSpendSubmit(this.state);
-        this.setState({name: '', price: '', category: '', date: date.formatDate(new Date())});
+        this.setState({
+            name: '',
+            price: '',
+            category: '',
+            date: date.formatDate(new Date())
+        });
         this.firstInput.focus();
     }
 
     render() {
         return (
             <form onSubmit={this.handleSubmit.bind(this)}>
-                <input type="text" placeholder="co..." value={this.state.name}
-                   onChange={this.handleNameChange.bind(this)}
-                   ref={(firstInput) => { this.firstInput = firstInput; }}/>
-                <input type="text" placeholder="ile..." value={this.state.price}
-                   onChange={this.handlePriceChange.bind(this)}/>
-               <input type="text" placeholder="kategoria..."
-                   onChange={this.handleCategoryChange.bind(this)} value={this.state.category}/>
-               <input type="date" placeholder="kiedy..." value={this.state.date}
-                  onChange={this.handleDateChange.bind(this)}/>
-              <input type="submit" value="+"/>
+                <input
+                    type="text"
+                    placeholder="co..."
+                    value={this.state.name}
+                    onChange={this.handleNameChange.bind(this)}
+                    ref={(firstInput) => {
+                    this.firstInput = firstInput;
+                }}/>
+                <input
+                    type="text"
+                    placeholder="ile..."
+                    value={this.state.price}
+                    onChange={this.handlePriceChange.bind(this)}/>
+                <input
+                    type="text"
+                    placeholder="kategoria..."
+                    onChange={this.handleCategoryChange.bind(this)}
+                    value={this.state.category}/>
+                <input
+                    type="date"
+                    placeholder="kiedy..."
+                    value={this.state.date}
+                    onChange={this.handleDateChange.bind(this)}/>
+                <input type="submit" value="+"/>
             </form>
         )
     }
@@ -202,13 +206,26 @@ export class SpendingsFilter extends React.Component {
     render() {
         return (
             <form>
-                Today <input type="radio" name="date" value={this.props.dates.today}
-                checked={this.props.selectedDate === this.props.dates.today} onChange={this.handleDateChange}/>
-                All <input type="radio" name="date" value={this.props.dates.all}
-                checked={this.props.selectedDate === this.props.dates.all} onChange={this.handleDateChange}/>
-                <input type="text" placeholder="filtruj kategorie..." value={this.props.category} onChange={this.handleCategoryChange}/>
+                Today
+                <input
+                    type="radio"
+                    name="date"
+                    value={this.props.dates.today}
+                    checked={this.props.selectedDate === this.props.dates.today}
+                    onChange={this.handleDateChange}/>
+                All
+                <input
+                    type="radio"
+                    name="date"
+                    value={this.props.dates.all}
+                    checked={this.props.selectedDate === this.props.dates.all}
+                    onChange={this.handleDateChange}/>
+                <input
+                    type="text"
+                    placeholder="filtruj kategorie..."
+                    value={this.props.category}
+                    onChange={this.handleCategoryChange}/>
             </form>
         )
     }
-}
-;
+};

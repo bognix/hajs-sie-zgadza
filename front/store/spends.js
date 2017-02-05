@@ -4,14 +4,14 @@ let allSpendsCached, todaySpendsCached;
 
 export function getTodaySpends(allSpends) {
 
-        const todayString = new Date().toDateString(),
-            todaySpends = allSpends.filter((spend) => {
-                return new Date(spend.date).toDateString() === todayString;
-            });
+    const todayString = new Date().toDateString(),
+        todaySpends = allSpends.filter((spend) => {
+            return new Date(spend.date).toDateString() === todayString;
+        });
 
-        todaySpendsCached = todaySpends;
+    todaySpendsCached = todaySpends;
 
-        return todaySpends;
+    return todaySpends;
 
 }
 
@@ -41,9 +41,9 @@ export function getAllSpends() {
 
             return resolve(parsedData);
 
-            }).catch((err) => {
-                reject(err);
-            });
+        }).catch((err) => {
+            reject(err);
+        });
     });
 }
 
