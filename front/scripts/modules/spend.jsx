@@ -1,6 +1,6 @@
 import React from 'react';
 import sheet from 'utils/sheet';
-import store from 'store/spends';
+import store from 'store/entries';
 import date from 'utils/date';
 import EntriesBox from 'modules/entries/entriesBox'
 
@@ -16,7 +16,7 @@ export default class Spendings extends React.Component {
     }
 
     componentDidMount() {
-        store.getAllSpends(sheetID).then((allSpendings) => {
+        store.getAllEntries(sheetID).then((allSpendings) => {
             this.setState({allSpendings: allSpendings});
         }).catch((err) => {
             console.log(err);

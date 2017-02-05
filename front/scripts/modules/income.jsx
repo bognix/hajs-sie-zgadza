@@ -1,6 +1,7 @@
 import React from 'react';
-import EntriesBox from 'modules/entries/entriesBox'
+import EntriesBox from 'modules/entries/entriesBox';
 import sheet from 'utils/sheet';
+import store from 'store/entries';
 
 const sheetID = 'incomes';
 
@@ -14,7 +15,11 @@ export default class Incomes extends React.Component {
     }
 
     componentDidMount() {
-        //TODO fetch data
+        store.getAllEntries(sheetID).then((allIncomes) => {
+            this.setState({allIncomes: allIncomes});
+        }).catch((err) => {
+            console.log(err);
+        });
     }
 
     handleIncomeSubmit(income) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import {add as addSpend, put as putSpendings} from 'utils/sheet';
-import store from 'store/spends';
+import store from 'store/entries';
 import date from 'utils/date';
 import EntriesList from 'modules/entries/entriesList';
 import EntriesFilter from 'modules/entries/entriesFilter';
@@ -45,7 +45,8 @@ export default class EntriesBox extends React.Component {
         let visibleEntries = this.props.entries;
 
         if (this.state.selectedDate === this.dates.today) {
-            visibleEntries = store.getTodaySpends(this.props.entries);
+            //TODO this component shouldn't talk with store
+            visibleEntries = store.getTodayEntries(this.props.entries);
         }
 
         if (this.state.category) {
