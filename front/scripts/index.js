@@ -3,10 +3,8 @@ import {render} from 'react-dom';
 import { Router, Route, IndexRedirect, browserHistory } from 'react-router';
 import App from './modules/app';
 import Spendings from './modules/spend';
-
-//TODO - does it have to be like this?
-require("!style-loader!css-loader!sass-loader!app.scss");
-
+//@TODO extract css to seperate file so they are not included via JS
+import 'app.scss';
 
 render(
   <Router history={browserHistory}>
