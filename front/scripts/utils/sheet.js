@@ -1,5 +1,5 @@
 import {getCookie} from 'utils/cookie';
-import sheetConfig from '../../config/sheet.json'
+import sheetConfig from 'sheet.json';
 
 const range = 'A:D',
     spendProperties = 4;
