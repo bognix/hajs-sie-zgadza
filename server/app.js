@@ -33,14 +33,16 @@ compiler = webpack(config);
 
 app.use(webpackDevMiddleware(compiler, {
     publicPath: config.output.publicPath,
-    stats: {colors: true}
+    stats: {
+        colors: true
+    }
 }));
 
 app.use(webpackHotMiddleware(compiler, {
     log: console.log
 }));
 
-app.get('/', function (req, res) {
+app.get('/', function(req, res) {
     if (req.session.token) {
         res.cookie('token', req.session.token);
         res.cookie('user', req.session.userDisplayName);
@@ -54,17 +56,21 @@ app.get('/', function (req, res) {
     });
 });
 
-app.get('/auth/google', passport.authenticate('google', {scope: ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/spreadsheets']}));
+app.get('/auth/google', passport.authenticate('google', {
+    scope: ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/spreadsheets']
+}));
 
-app.get('/logout', function (req, res) {
+app.get('/logout', function(req, res) {
     req.logout();
     req.session = null;
     res.redirect('/');
 });
 
 app.get('/auth/google/callback',
-    passport.authenticate('google', {failureRedirect: '/'}),
-    function (req, res) {
+    passport.authenticate('google', {
+        failureRedirect: '/'
+    }),
+    function(req, res) {
         req.session.token = req.user.token;
         req.session.userDisplayName = req.user.profile.displayName;
         res.redirect('/');
@@ -72,9 +78,17 @@ app.get('/auth/google/callback',
 );
 
 app.get('/spends', function(req, res) {
-    res.redirect('/');
+    res.render('index', {
+        layout: false
+    });
 });
 
-app.listen(3000, function () {
+app.get('/incomes', function(req, res) {
+    res.render('index', {
+        layout: false
+    });
+});
+
+app.listen(3000, function() {
     console.log('Server is running on port 3000');
 });

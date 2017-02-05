@@ -1,27 +1,27 @@
 import React from 'react';
 
-export default class SpendingsList extends React.Component {
+export default class EntriesList extends React.Component {
     getSpendings() {
-        const allSpends = this.props.data.map((spend) => {
+        const allEntries = this.props.entries.map((entry) => {
             return (
-                <Spend
-                    name={spend.name}
-                    price={spend.price}
-                    date={spend.date}
-                    category={spend.category}
+                <Entry
+                    name={entry.name}
+                    price={entry.price}
+                    date={entry.date}
+                    category={entry.category}
                     key={Math.floor(Math.random() * 1000)}
-                    onSpendRemove={this.props.onSpendRemove.bind(this, spend)}></Spend>
+                    onEntryRemoval={this.props.onEntryRemoval.bind(this, entry)}></Entry>
             );
         });
 
-        return allSpends;
+        return allEntries;
     }
 
     calculateTotalAmount() {
         let totalAmount = 0;
 
-        this.props.data.forEach((spend) => {
-            totalAmount += parseInt(spend.price) || 0;
+        this.props.entries.forEach((entry) => {
+            totalAmount += parseInt(entry.price) || 0;
         });
 
         return totalAmount;
@@ -29,7 +29,7 @@ export default class SpendingsList extends React.Component {
 
     render() {
         return (
-            <div className="spendings-list">
+            <div className="entries-list">
                 <table>
                     <thead>
                         <tr>
@@ -41,18 +41,18 @@ export default class SpendingsList extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {/*TODO optimize so iterating twice through all passed spendings is redundant {this.getSpendings()} */}
+                        {/*TODO optimize so iterating twice through all passed entries is redundant {this.getSpendings()} */}
                         {this.getSpendings()}
                     </tbody>
                 </table>
-                {/*TODO optimize so iterating twice through all passed spendings is redundant {this.getSpendings()} */}
+                {/*TODO optimize so iterating twice through all passed entriesings is redundant {this.getSpendings()} */}
                 <div>Suma: {this.calculateTotalAmount()}</div>
             </div>
         )
     }
 }
 
-export class Spend extends React.Component {
+export class Entry extends React.Component {
     render() {
         return (
             <tr>
@@ -61,7 +61,7 @@ export class Spend extends React.Component {
                 <td>{this.props.price}</td>
                 <td>{this.props.category}</td>
                 <td>
-                    <button onClick={this.props.onSpendRemove}>-</button>
+                    <button onClick={this.props.onEntryRemoval}>-</button>
                 </td>
             </tr>
         )
