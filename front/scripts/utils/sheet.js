@@ -2,12 +2,12 @@ import {getCookie} from 'utils/cookie';
 import sheetConfig from 'sheet.json';
 
 const range = 'A:D',
-    spendProperties = 4;
+    numberOfColumns = 4;
 
-export function getAll() {
+export function getAll(sheetID) {
     return new Promise(function(resolve, reject) {
         fetch(createRequest({
-                path: `values/all!${range}`
+                path: `values/${sheetID}!${range}`
             }))
             .then((response) => {
                 if (response.ok) {
@@ -25,16 +25,16 @@ export function getAll() {
     });
 }
 
-export function add(spend) {
+export function addRow(sheetID, entry) {
     return new Promise((resolve, reject) => {
         const formData = new FormData();
 
         fetch(createRequest({
                 method: 'post',
-                path: `values/${range}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
+                path: `values/${sheetID}!${range}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
                 body: JSON.stringify({
                     values: [
-                        [spend.name, spend.price, spend.category, spend.date]
+                        [entry.name, entry.price, entry.category, entry.date]
                     ]
                 })
             }))
@@ -51,22 +51,22 @@ export function add(spend) {
     });
 }
 
-export function put(spendings) {
+export function replaceAllRows(sheetID, entries) {
     return new Promise((resolve, reject) => {
         const values = [];
 
-        spendings.forEach((spend) => {
-            values.push(Object.values(spend));
+        entries.forEach((entry) => {
+            values.push(Object.values(entry));
         });
 
-        values.push(Array(spendProperties).fill(''));
+        values.push(Array(numberOfColumns).fill(''));
 
         fetch(createRequest({
                 method: 'post',
                 path: 'values:batchUpdate',
                 body: JSON.stringify({
                     data: {
-                        range: range,
+                        range: `!${sheetID}!${range}`,
                         values: values
                     },
                     valueInputOption: "USER_ENTERED",
@@ -111,5 +111,7 @@ function createRequest({
 }
 
 export default {
-    getAll
+    getAll,
+    addRow,
+    replaceAllRows
 }

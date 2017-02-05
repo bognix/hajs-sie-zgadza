@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default class EntriesList extends React.Component {
-    getSpendings() {
+    getEntries() {
         const allEntries = this.props.entries.map((entry) => {
             return (
                 <Entry
@@ -41,11 +41,11 @@ export default class EntriesList extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {/*TODO optimize so iterating twice through all passed entries is redundant {this.getSpendings()} */}
-                        {this.getSpendings()}
+                        {/*TODO optimize so iterating twice through all passed entries is redundant {this.getEntries()} */}
+                        {this.getEntries()}
                     </tbody>
                 </table>
-                {/*TODO optimize so iterating twice through all passed entriesings is redundant {this.getSpendings()} */}
+                {/*TODO optimize so iterating twice through all passed entriesings is redundant {this.getEntries()} */}
                 <div>Suma: {this.calculateTotalAmount()}</div>
             </div>
         )

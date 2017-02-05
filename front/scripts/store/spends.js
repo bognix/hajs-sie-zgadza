@@ -15,13 +15,13 @@ export function getTodaySpends(allSpends) {
 
 }
 
-export function getAllSpends() {
+export function getAllSpends(sheetID) {
     return new Promise((resolve, reject) => {
         if (allSpendsCached) {
             return resolve(allSpendsCached);
         }
 
-        sheet.getAll().then((data) => {
+        sheet.getAll(sheetID).then((data) => {
             const parsedData = [];
 
             if (!data.values) {

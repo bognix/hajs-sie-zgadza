@@ -1,5 +1,8 @@
 import React from 'react';
 import EntriesBox from 'modules/entries/entriesBox'
+import sheet from 'utils/sheet';
+
+const sheetID = 'incomes';
 
 export default class Incomes extends React.Component {
     constructor(props) {
@@ -20,10 +23,11 @@ export default class Incomes extends React.Component {
         });
 
         //TODO create notification about successful save
-        addSpend(income);
+        //TODO call sheets only through store
+        sheet.addRow(sheetID, income);
     }
 
-    handleSpendRemoval(income) {
+    handleIncomeRemoval(income) {
         const currentIncomes = this.state.allIncomes,
             indexToRemove = currentIncomes.indexOf(income);
 
@@ -32,13 +36,14 @@ export default class Incomes extends React.Component {
         this.setState({allIncomes: currentIncomes});
 
         //TODO create notification about successful save
-        putSpendings(currentIncomes);
+        //TODO call sheets only through store
+        sheet.replaceAllRows(sheetID, currentIncomes);
     }
 
     render() {
         return (<EntriesBox
             entries={this.state.allIncomes}
-            onEntrySubmit={this.handleIncomeSubmit}
-            onEntryRemoval={this.handleIncomeRemoval}/>)
+            onEntrySubmit={this.handleIncomeSubmit.bind(this)}
+            onEntryRemoval={this.handleIncomeRemoval.bind(this)}/>)
     }
 };

@@ -1,8 +1,10 @@
 import React from 'react';
-import {add as addSpend, put as putSpendings} from 'utils/sheet';
+import sheet from 'utils/sheet';
 import store from 'store/spends';
 import date from 'utils/date';
 import EntriesBox from 'modules/entries/entriesBox'
+
+const sheetID = 'spendings';
 
 export default class Spendings extends React.Component {
     constructor(props) {
@@ -14,20 +16,21 @@ export default class Spendings extends React.Component {
     }
 
     componentDidMount() {
-        store.getAllSpends().then((allSpendings) => {
+        store.getAllSpends(sheetID).then((allSpendings) => {
             this.setState({allSpendings: allSpendings});
         }).catch((err) => {
             console.log(err);
         });
     }
 
-    handleSpendSumbit(spend) {
+    handleSpendSubmit(spend) {
         this.setState({
             allSpendings: this.state.allSpendings.concat([spend])
         });
 
         //TODO create notification about successful save
-        addSpend(spend);
+        //TODO call sheets only through store
+        sheet.addRow(sheetID, spend);
     }
 
     handleSpendRemoval(spend) {
@@ -39,13 +42,14 @@ export default class Spendings extends React.Component {
         this.setState({allSpendings: currentSpendings});
 
         //TODO create notification about successful save
-        putSpendings(currentSpendings);
+        //TODO call sheets only through store
+        sheet.replaceAllRows(sheetID, currentSpendings);
     }
 
     render() {
         return (<EntriesBox
             entries={this.state.allSpendings}
-            onEntrySubmit={this.handleSpendSubmit}
+            onEntrySubmit={this.handleSpendSubmit.bind(this)}
             onEntryRemoval={this.handleSpendRemoval}/>)
     }
 };
