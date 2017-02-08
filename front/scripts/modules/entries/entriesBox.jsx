@@ -5,72 +5,42 @@ import EntriesFilter from 'modules/entries/entriesFilter';
 import EntryForm from 'modules/entries/entryForm';
 
 export default class EntriesBox extends React.Component {
-    constructor(props) {
-        super(props);
 
-        this.state = {
-            category: '',
-            selectedDate: ''
-        }
+    calculateTotalAmount (entries) {
 
-        this.dates = {
-            today: 'today',
-            all: 'all'
-        }
+        let totalAmount = 0;
+
+        entries.forEach((entry) => {
+
+            totalAmount += parseInt(entry.price) || 0;
+
+        });
+
+        return totalAmount;
+
     }
 
-    componentDidMount() {
-        this.setState({selectedDate: this.dates.today});
-    }
+    render () {
 
-    handleEntrySubmit(entry) {
-        this.props.onEntrySubmit(entry);
-    }
-
-    handleEntryRemoval(entry) {
-        this.props.handleEntryRemoval(entry);
-    }
-
-    handleDateChange(date) {
-        this.setState({selectedDate: date});
-    }
-
-    handleCategoryChange(category) {
-        this.setState({category: category})
-    }
-
-    calculatevisibleEntries() {
-        let visibleEntries = this.props.entries;
-
-        if (this.state.selectedDate === this.dates.today) {
-            visibleEntries = date.filterToday(this.props.entries);
-        }
-
-        if (this.state.category) {
-            visibleEntries = visibleEntries.filter((entry) => {
-                return entry.category.indexOf(this.state.category) === 0;
-            });
-        }
-
-        return visibleEntries;
-    }
-
-    render() {
-        const visibleEntries = this.calculatevisibleEntries();
+        const totalAmount = this.calculateTotalAmount(this.props.entries);
 
         return (
             <div>
                 <EntriesFilter
-                    onDateChange={this.handleDateChange.bind(this)}
-                    onCategoryChange={this.handleCategoryChange.bind(this)}
-                    dates={this.dates}
-                    selectedDate={this.state.selectedDate}
-                    category={this.state.category}/>
-                <EntryForm onEntrySubmit={this.handleEntrySubmit.bind(this)}/>
+                    onDateChange={this.props.onDateChange.bind(this)}
+                    onCategoryChange={this.props.onCategoryChange.bind(this)}
+                    dates={this.props.dates}
+                    selectedDate={this.props.selectedDate}
+                    category={this.props.category}
+                    totalAmount={totalAmount}/>
+                <EntryForm onEntrySubmit={this.props.onEntrySubmit.bind(this)}/>
                 <EntriesList
-                    entries={visibleEntries}
-                    onEntryRemoval={this.handleEntryRemoval.bind(this)}/>
+                    entries={this.props.entries}
+                    onEntryRemoval={this.props.onEntryRemoval.bind(this)}/>
+                {/* TODO optimize so iterating twice through all passed entriesings is redundant {this.getEntries()} */}
+                <div>Suma: {totalAmount}</div>
             </div>
-        )
+        );
+
     }
 }

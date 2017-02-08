@@ -1,9 +1,9 @@
 import React from 'react';
 
 export default class EntriesList extends React.Component {
-    getEntries() {
-        const allEntries = this.props.entries.map((entry) => {
-            return (
+    getEntries () {
+
+        const allEntries = this.props.entries.map((entry) =>
                 <Entry
                     name={entry.name}
                     price={entry.price}
@@ -12,22 +12,14 @@ export default class EntriesList extends React.Component {
                     key={Math.floor(Math.random() * 1000)}
                     onEntryRemoval={this.props.onEntryRemoval.bind(this, entry)}></Entry>
             );
-        });
 
         return allEntries;
+
     }
 
-    calculateTotalAmount() {
-        let totalAmount = 0;
 
-        this.props.entries.forEach((entry) => {
-            totalAmount += parseInt(entry.price) || 0;
-        });
+    render () {
 
-        return totalAmount;
-    }
-
-    render() {
         return (
             <div className="entries-list">
                 <table>
@@ -41,19 +33,19 @@ export default class EntriesList extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {/*TODO optimize so iterating twice through all passed entries is redundant {this.getEntries()} */}
+                        {/* TODO optimize so iterating twice through all passed entries is redundant {this.getEntries()} */}
                         {this.getEntries()}
                     </tbody>
                 </table>
-                {/*TODO optimize so iterating twice through all passed entriesings is redundant {this.getEntries()} */}
-                <div>Suma: {this.calculateTotalAmount()}</div>
             </div>
-        )
+        );
+
     }
 }
 
 export class Entry extends React.Component {
-    render() {
+    render () {
+
         return (
             <tr>
                 <td>{this.props.date}</td>
@@ -64,6 +56,7 @@ export class Entry extends React.Component {
                     <button onClick={this.props.onEntryRemoval}>-</button>
                 </td>
             </tr>
-        )
+        );
+
     }
 }

@@ -2,7 +2,8 @@ import React from 'react';
 import date from 'utils/date';
 
 export default class EntryForm extends React.Component {
-    constructor(props) {
+    constructor (props) {
+
         super(props);
 
         this.state = {
@@ -10,26 +11,36 @@ export default class EntryForm extends React.Component {
             price: '',
             category: '',
             date: date.formatDate(new Date())
-        }
+        };
+
     }
 
-    handleNameChange(e) {
+    handleNameChange (e) {
+
         this.setState({name: e.target.value});
+
     }
 
-    handlePriceChange(e) {
+    handlePriceChange (e) {
+
         this.setState({price: e.target.value});
+
     }
 
-    handleDateChange(e) {
+    handleDateChange (e) {
+
         this.setState({date: e.target.value});
+
     }
 
-    handleCategoryChange(e) {
+    handleCategoryChange (e) {
+
         this.setState({category: e.target.value});
+
     }
 
-    handleSubmit(e) {
+    handleSubmit (e) {
+
         e.preventDefault();
 
         this.props.onEntrySubmit(this.state);
@@ -40,9 +51,11 @@ export default class EntryForm extends React.Component {
             date: date.formatDate(new Date())
         });
         this.firstInput.focus();
+
     }
 
-    render() {
+    render () {
+
         return (
             <form onSubmit={this.handleSubmit.bind(this)}>
                 <input
@@ -51,8 +64,10 @@ export default class EntryForm extends React.Component {
                     value={this.state.name}
                     onChange={this.handleNameChange.bind(this)}
                     ref={(firstInput) => {
-                    this.firstInput = firstInput;
-                }}/>
+
+                        this.firstInput = firstInput;
+
+                    }}/>
                 <input
                     type="text"
                     placeholder="ile..."
@@ -70,6 +85,7 @@ export default class EntryForm extends React.Component {
                     onChange={this.handleDateChange.bind(this)}/>
                 <input type="submit" value="+"/>
             </form>
-        )
+        );
+
     }
 }
