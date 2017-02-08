@@ -6,6 +6,16 @@ function formatDate(dateObject) {
     return `${dateObject.getFullYear()}-${month}-${day}`;
 }
 
+function filterToday(allEntries) {
+    const todayString = new Date().toDateString(),
+        todayEntries = allEntries.filter((entry) => {
+            return new Date(entry.date).toDateString() === todayString;
+        });
+
+    return todayEntries;
+}
+
 export default {
-    formatDate
+    formatDate,
+    filterToday
 };

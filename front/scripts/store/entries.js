@@ -1,26 +1,7 @@
-import sheet from '../utils/sheet';
+import sheet from 'utils/sheet';
 
-let allEntriesCached, todayEntriesCached;
-
-export function getTodayEntries(allEntries) {
-
-    const todayString = new Date().toDateString(),
-        todayEntries = allEntries.filter((entry) => {
-            return new Date(entry.date).toDateString() === todayString;
-        });
-
-    todayEntriesCached = todayEntries;
-
-    return todayEntries;
-
-}
-
-export function getAllEntries(sheetID) {
+export function getAll(sheetID) {
     return new Promise((resolve, reject) => {
-        if (allEntriesCached) {
-            return resolve(allEntriesCached);
-        }
-
         sheet.getAll(sheetID).then((data) => {
             const parsedData = [];
 
@@ -37,17 +18,23 @@ export function getAllEntries(sheetID) {
                 });
             });
 
-            allEntriesCached = parsedData;
-
             return resolve(parsedData);
-
         }).catch((err) => {
             reject(err);
         });
     });
 }
 
+export function add(sheetID, entry) {
+    sheet.addRow(sheetID, entry);
+}
+
+export function replaceAll(sheetID, entries) {
+    sheet.replaceAllRows(sheetID, entries);
+}
+
 export default {
-    getAllEntries,
-    getTodayEntries
+    getAll,
+    add,
+    replaceAll
 };

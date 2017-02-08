@@ -1,10 +1,7 @@
 import React from 'react';
-import sheet from 'utils/sheet';
-import store from 'store/entries';
+import store from 'store/spendings';
 import date from 'utils/date';
 import EntriesBox from 'modules/entries/entriesBox'
-
-const sheetID = 'spendings';
 
 export default class Spendings extends React.Component {
     constructor(props) {
@@ -16,7 +13,7 @@ export default class Spendings extends React.Component {
     }
 
     componentDidMount() {
-        store.getAllEntries(sheetID).then((allSpendings) => {
+        store.getAll().then((allSpendings) => {
             this.setState({allSpendings: allSpendings});
         }).catch((err) => {
             console.log(err);
@@ -29,8 +26,7 @@ export default class Spendings extends React.Component {
         });
 
         //TODO create notification about successful save
-        //TODO call sheets only through store
-        sheet.addRow(sheetID, spend);
+        store.add(spend);
     }
 
     handleSpendRemoval(spend) {
@@ -42,8 +38,7 @@ export default class Spendings extends React.Component {
         this.setState({allSpendings: currentSpendings});
 
         //TODO create notification about successful save
-        //TODO call sheets only through store
-        sheet.replaceAllRows(sheetID, currentSpendings);
+        store.replaceAll(currentSpendings);
     }
 
     render() {
