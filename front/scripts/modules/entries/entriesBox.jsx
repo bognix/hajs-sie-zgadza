@@ -31,13 +31,11 @@ export default class EntriesBox extends React.Component {
                     onCategoryChange={this.props.onCategoryChange.bind(this)}
                     dates={this.props.dates}
                     selectedDate={this.props.selectedDate}
-                    category={this.props.category}
-                    totalAmount={totalAmount}/>
+                    category={this.props.category}/>
                 <EntryForm onEntrySubmit={this.props.onEntrySubmit.bind(this)}/>
                 <EntriesList
                     entries={this.props.entries}
                     onEntryRemoval={this.props.onEntryRemoval.bind(this)}/>
-                {/* TODO optimize so iterating twice through all passed entriesings is redundant {this.getEntries()} */}
                 <div>Suma: {totalAmount}</div>
             </div>
         );

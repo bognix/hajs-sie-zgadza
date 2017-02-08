@@ -12,12 +12,6 @@ export default class App extends React.Component {
                     <li>
                         <Link to="/recent">Recent</Link>
                     </li>
-                    <li>
-                        <Link to="/incomes">My Inocomes</Link>
-                    </li>
-                    <li>
-                        <Link to="/incomes">My Inocomes</Link>
-                    </li>
                 </ul>
             </nav>
             {this.props.children}

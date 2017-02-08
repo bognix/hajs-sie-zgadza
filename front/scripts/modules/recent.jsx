@@ -72,11 +72,11 @@ export default class Recent extends React.Component {
     handleSpendSubmit (spend) {
 
         this.setState({
-            spendings: this.state.spendings.concat([income])
+            spendings: this.state.spendings.concat([spend])
         });
 
         // TODO create notification about successful save
-        spendingsStore.add(income);
+        spendingsStore.add(spend);
 
     }
 
@@ -90,7 +90,7 @@ export default class Recent extends React.Component {
         this.setState({incomes});
 
         // TODO create notification about successful save
-        store.replaceAll(incomes);
+        incomesStore.replaceAll(incomes);
 
     }
 
@@ -104,7 +104,7 @@ export default class Recent extends React.Component {
         this.setState({spendings});
 
         // TODO create notification about successful save
-        store.replaceAll(spendings);
+        spendingsStore.replaceAll(spendings);
 
     }
 
@@ -210,9 +210,7 @@ export default class Recent extends React.Component {
                 onEntryRemoval={this.handleIncomeRemoval.bind(this)}
                 onDateChange={this.handleIncomesDateChange.bind(this)}
                 onCategoryChange={this.handleIncomesCategoryChange.bind(this)}/>
-            <span>Balance:
-            </span>
-            <span>{balance}</span>
+            <span>Balance:</span><span>{balance}</span>
         </div>;
 
     }
