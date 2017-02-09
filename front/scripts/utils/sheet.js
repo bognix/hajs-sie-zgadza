@@ -105,8 +105,6 @@ function buildCreateSheetRequest() {
                     "properties": {
                         sheetId: 10,
                         title: "testSheet",
-                        index: 0,
-                        sheetType: "GRID",
                         hidden: false
                     }
                 }
