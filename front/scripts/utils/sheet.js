@@ -1,13 +1,18 @@
-import {getCookie} from 'utils/cookie';
+import {
+    getCookie
+} from 'utils/cookie';
 import sheetConfig from 'sheet.json';
+import date from 'utils/date';
 
 const range = 'A:D',
     numberOfColumns = 4;
 
 export function getAll(sheetID) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
+        console.log(date.getCurrentMonthYear());
+        const datePrefix = date.getCurrentMonthYear();
         fetch(createRequest({
-                path: `values/${sheetID}!${range}`
+                path: `/values/${sheetID}!${range}`
             }))
             .then((response) => {
                 if (response.ok) {
@@ -22,6 +27,9 @@ export function getAll(sheetID) {
             .catch((err) => {
                 reject(err);
             });
+        const createSheetReq = buildCreateSheetRequest();
+        console.log(createSheetReq);
+        fetch(createRequest(createSheetReq));
     });
 }
 
@@ -31,7 +39,7 @@ export function addRow(sheetID, entry) {
 
         fetch(createRequest({
                 method: 'post',
-                path: `values/${sheetID}!${range}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
+                path: `/values/${sheetID}!${range}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
                 body: JSON.stringify({
                     values: [
                         [entry.name, entry.price, entry.category, entry.date]
@@ -55,6 +63,7 @@ export function replaceAllRows(sheetID, entries) {
     return new Promise((resolve, reject) => {
         const values = [];
 
+        const datePrefix = date.getCurrentMonthYear();
         entries.forEach((entry) => {
             values.push(Object.values(entry));
         });
@@ -63,7 +72,7 @@ export function replaceAllRows(sheetID, entries) {
 
         fetch(createRequest({
                 method: 'post',
-                path: 'values:batchUpdate',
+                path: '/values:batchUpdate',
                 body: JSON.stringify({
                     data: {
                         range: `!${sheetID}!${range}`,
@@ -84,6 +93,32 @@ export function replaceAllRows(sheetID, entries) {
                 reject(err);
             });
     });
+}
+
+function buildCreateSheetRequest() {
+    return {
+        path: ':batchUpdate',
+        body: JSON.stringify({
+            requests: [
+            {
+                "addSheet": {
+                    "properties": {
+                        sheetId: 10,
+                        title: "testSheet",
+                        index: 0,
+                        sheetType: "GRID",
+                        hidden: false
+                    }
+                }
+            }],
+            "includeSpreadsheetInResponse": false,
+            "responseRanges": [
+                "A:D"
+            ],
+            "responseIncludeGridData": false,
+        }),
+        method: 'post'
+    }
 }
 
 function createRequest({
@@ -107,7 +142,8 @@ function createRequest({
     if (body) {
         requestConfig.body = body;
     }
-    return new Request(`https://sheets.googleapis.com/v4/spreadsheets/${spreadSheetId}/${path}`, requestConfig);
+    // path has to start with `/` if it's expected
+    return new Request(`https://sheets.googleapis.com/v4/spreadsheets/${spreadSheetId}${path}`, requestConfig);
 }
 
 export default {
