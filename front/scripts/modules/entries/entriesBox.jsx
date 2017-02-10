@@ -1,5 +1,4 @@
 import React from 'react';
-import date from 'utils/date';
 import EntriesList from 'modules/entries/entriesList';
 import EntriesFilter from 'modules/entries/entriesFilter';
 import EntryForm from 'modules/entries/entryForm';
@@ -27,10 +26,7 @@ export default class EntriesBox extends React.Component {
         return (
             <div>
                 <EntriesFilter
-                    onDateChange={this.props.onDateChange.bind(this)}
                     onCategoryChange={this.props.onCategoryChange.bind(this)}
-                    dates={this.props.dates}
-                    selectedDate={this.props.selectedDate}
                     category={this.props.category}/>
                 <EntryForm onEntrySubmit={this.props.onEntrySubmit.bind(this)}/>
                 <EntriesList

@@ -2,216 +2,121 @@ import React from 'react';
 import spendingsStore from 'store/spendings';
 import incomesStore from 'store/incomes';
 import EntriesBox from 'modules/entries/entriesBox';
-import date from 'utils/date';
 
 export default class Recent extends React.Component {
-    constructor (props) {
-
+    constructor(props) {
         super(props);
 
         this.state = {
             spendings: [],
             incomes: [],
             balance: 0,
-            spendingsDate: '',
-            incomesDate: '',
             spendingsCategory: '',
             incomesCategory: ''
         };
-
-        this.dates = {
-            today: 'today',
-            all: 'all'
-        };
-
     }
 
-    componentDidMount () {
-
+    componentDidMount() {
         spendingsStore.getAll().then((spendings) => {
-
-            this.setState({
-                spendings,
-                spendingsDate: this.dates.today
-            });
-
+            this.setState({spendings});
         }).catch((err) => {
-
             // TODO notification about failed fetch
             console.log(err);
-
         });
 
         incomesStore.getAll().then((incomes) => {
-
-            this.setState({
-                incomes,
-                incomesDate: this.dates.today
-            });
-
+            this.setState({incomes});
         }).catch((err) => {
-
             // TODO notification about failed fetch
             console.log(err);
-
         });
-
     }
 
-    handleIncomeSubmit (income) {
-
+    handleIncomeSubmit(income) {
         this.setState({
             incomes: this.state.incomes.concat([income])
         });
 
         // TODO create notification about successful save
         incomesStore.add(income);
-
     }
 
-    handleSpendSubmit (spend) {
-
+    handleSpendSubmit(spend) {
         this.setState({
             spendings: this.state.spendings.concat([spend])
         });
 
         // TODO create notification about successful save
         spendingsStore.add(spend);
-
     }
 
-    handleIncomeRemoval (income) {
-
-        const incomes = this.state.incomes,
-            indexToRemove = incomes.indexOf(income);
-
-        incomes.splice(indexToRemove, 1);
-
-        this.setState({incomes});
-
-        // TODO create notification about successful save
-        incomesStore.replaceAll(incomes);
-
+    handleIncomeRemoval(income) {
+        this.setState({
+            incomes: incomesStore.remove(this.state.incomes, income)
+        });
     }
 
-    handleSpendRemoval (spend) {
-
-        const spendings = this.state.spendings,
-            indexToRemove = spendings.indexOf(spend);
-
-        spendings.splice(indexToRemove, 1);
-
-        this.setState({spendings});
-
-        // TODO create notification about successful save
-        spendingsStore.replaceAll(spendings);
-
+    handleSpendRemoval(spend) {
+        this.setState({
+            spendings: incomesStore.remove(this.state.spendings, spend)
+        });
     }
 
-    handleSpendingsCategoryChange (category) {
+    handleSpendingsCategoryChange(category) {
+        this.setState({spendingsCategory: category});
+    }
 
+    handleIncomesCategoryChange(category) {
         this.setState({incomesCategory: category});
-
     }
 
-    handleSpendingsDateChange (date) {
-
-        this.setState({spendingsDate: date});
-
-    }
-
-    handleIncomesCategoryChange (category) {
-
-        this.setState({incomesCategory: category});
-
-    }
-
-    handleIncomesDateChange (date) {
-
-        this.setState({incomesDate: date});
-
-    }
-
-    calculateVisibleSpendings (spendings) {
-
-        if (this.state.spendingsDate === this.dates.today) {
-
-            spendings = date.filterToday(spendings);
-
-        }
-
+    calculateVisibleSpendings(spendings) {
         if (this.state.spendingsCategory) {
-
-            spendings = spendings.filter((entry) => entry.category.indexOf(this.state.category) === 0);
-
+            spendings = spendings.filter((entry) => entry.category.indexOf(this.state.spendingsCategory) === 0);
         }
 
         return spendings;
-
     }
 
-    calculateVisibleIncomes (incomes) {
-
-        if (this.state.incomesDate === this.dates.today) {
-
-            incomes = date.filterToday(incomes);
-
-        }
-
+    calculateVisibleIncomes(incomes) {
         if (this.state.incomesCategory) {
-
-            incomes = incomes.filter((entry) => entry.category.indexOf(this.state.category) === 0);
-
+            incomes = incomes.filter((entry) => entry.category.indexOf(this.state.incomesCategory) === 0);
         }
 
         return incomes;
-
     }
 
-    calculateBalance (incomes, spendings) {
-
+    calculateBalance(incomes, spendings) {
         let balance = 0;
 
         incomes.forEach((income) => {
-
             balance += parseInt(income.price) || 0;
-
         });
 
         spendings.forEach((spend) => {
-
             balance -= parseInt(spend.price) || 0;
-
         });
 
         return balance;
-
     }
 
-    render () {
-
+    render() {
         const visibleSpendings = this.calculateVisibleSpendings(this.state.spendings),
             visibleIncomes = this.calculateVisibleIncomes(this.state.incomes),
             balance = this.calculateBalance(visibleIncomes, visibleSpendings);
 
         return <div><EntriesBox
             entries={visibleSpendings}
-            selectedDate={this.state.spendingsDate}
-            dates={this.dates}
             onEntrySubmit={this.handleSpendSubmit.bind(this)}
             onEntryRemoval={this.handleSpendRemoval.bind(this)}
-            onDateChange={this.handleSpendingsDateChange.bind(this)}
             onCategoryChange={this.handleSpendingsCategoryChange.bind(this)}/>
             <EntriesBox
                 entries={visibleIncomes}
-                selectedDate={this.state.incomesDate}
-                dates={this.dates}
                 onEntrySubmit={this.handleIncomeSubmit.bind(this)}
                 onEntryRemoval={this.handleIncomeRemoval.bind(this)}
-                onDateChange={this.handleIncomesDateChange.bind(this)}
                 onCategoryChange={this.handleIncomesCategoryChange.bind(this)}/>
-            <span>Balance:</span><span>{balance}</span>
+            <span>Balance:</span>
+            <span>{balance}</span>
         </div>;
-
     }
 }

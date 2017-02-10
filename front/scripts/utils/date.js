@@ -15,9 +15,11 @@ function filterToday (allEntries) {
 }
 
 function getCurrentMonthYear () {
-    const today = new Date();
+    return getMonthYear(new Date());
+}
 
-    return String(`${formatMonth(today.getMonth())}-${today.getFullYear()}`);
+function getMonthYear(date) {
+    return String(`${formatMonth(date.getMonth())}-${date.getFullYear()}`);
 }
 
 function formatMonth(month) {
@@ -29,6 +31,7 @@ function appendZero(index) {
 
 export default {
     getCurrentMonthYear,
+    getMonthYear,
     formatDate,
     filterToday
 };

@@ -1,41 +1,38 @@
 import store from 'store/entries';
+import date from 'utils/date';
 
-const sheetID = 'incomes';
+const sheetPrefix = 'incomes';
 
 function getAll() {
     return new Promise((resolve, reject) => {
+        const sheetID = `${date.getCurrentMonthYear()}-${sheetPrefix}`
+
         store.getAll(sheetID).then((allIncomes) => {
             return resolve(allIncomes);
         });
     });
 }
 
-function filterToday(allIncomes) {
-    if (cachedTodayIncomes) {
-        return cachedTodayIncomes;
-    }
-
-    const todayString = new Date().toDateString(),
-        todayIncomes = allIncomes.filter((entry) => {
-            return new Date(entry.date).toDateString() === todayString;
-        });
-
-    cachedTodayIncomes = todayIncomes;
-
-    return todayIncomes;
-}
-
 function add(income) {
+    const sheetID = `${date.getMonthYear(new Date(income.date))}-${sheetPrefix}`;
+
     store.add(sheetID, income);
 }
 
-function replaceAll(incomes) {
+function remove(incomes, income) {
+    const indexToRemove = incomes.indexOf(income),
+        sheetID = `${date.getMonthYear(new Date(income.date))}-${sheetPrefix}`;
+
+    incomes.splice(indexToRemove, 1);
+
+    // TODO create notification about successful save
     store.replaceAll(sheetID, incomes);
+
+    return incomes;
 }
 
 export default {
     add,
-    filterToday,
     getAll,
-    replaceAll
+    remove
 }

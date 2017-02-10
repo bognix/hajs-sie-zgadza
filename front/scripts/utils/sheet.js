@@ -8,31 +8,34 @@ import random from 'utils/random';
 const range = 'A:D',
     numberOfColumns = 4;
 
+let existingSheets = [];
+
 export function getAll(sheetID) {
     return new Promise(function (resolve, reject) {
-        const datePrefix = date.getCurrentMonthYear(),
-            sheetIDToFetch = `${datePrefix}-${sheetID}`;
 
         //TODO optimiziation: make this request only once
         fetch(createRequest())
-            .then((spreadSheetDataRaw) => {
-                if (spreadSheetDataRaw.ok) {
-                    return spreadSheetDataRaw.json();
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
                 } else {
                     reject(response.status);
                 }
             }).then((spreadSheetData) => {
+                existingSheets = spreadSheetData.sheets;
+
                 const sheetToFetch = spreadSheetData.sheets.find((sheet) => {
-                    return sheet.properties.title === sheetIDToFetch;
+                    return sheet.properties.title === sheetID;
                 });
+
                 if (sheetToFetch) {
                     return fetch(createRequest({
-                        path: `/values/${sheetToFetch.properties.title}!${range}`
+                        path: `/values/${sheetID}!${range}`
                     }));
                 } else {
                     //TODO some notification this request failed
                     fetch(createRequest(buildCreateSheetRequest({
-                        sheetTitle: sheetIDToFetch
+                        sheetTitle: sheetID
                     })));
 
                     return resolve({});
@@ -56,14 +59,43 @@ export function getAll(sheetID) {
 
 export function addRow(sheetID, entry) {
     return new Promise((resolve, reject) => {
-        const formData = new FormData(),
-            datePrefix = date.getCurrentMonthYear(),
-            sheetIDToFetch = `${datePrefix}-${sheetID}`;
+        const sheetToFetch = existingSheets.find((sheet) => {
+                return sheet.properties.title === sheetID;
+            });
 
-
-        fetch(createRequest({
+        if (!sheetToFetch) {
+            //TODO create decorator if sheet doesn't exitst to avoid if/else
+            fetch(createRequest(buildCreateSheetRequest({
+                    sheetTitle: sheetID
+                })))
+                .then(() => {
+                    existingSheets.push({
+                        title: sheetID
+                    });
+                    return fetch(createRequest({
+                        method: 'post',
+                        path: `/values/${sheetID}!${range}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
+                        body: JSON.stringify({
+                            values: [
+                                [entry.name, entry.price, entry.category, entry.date]
+                            ]
+                        })
+                    }));
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json()
+                    } else {
+                        reject(response.status)
+                    }
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        } else {
+            fetch(createRequest({
                 method: 'post',
-                path: `/values/${sheetIDToFetch}!${range}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
+                path: `/values/${sheetID}!${range}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
                 body: JSON.stringify({
                     values: [
                         [entry.name, entry.price, entry.category, entry.date]
@@ -71,33 +103,23 @@ export function addRow(sheetID, entry) {
                 })
             }))
             .then((response) => {
-                if (response.ok) {
-                    return response.json()
-                } else {
-                    reject(response.status)
-                }
-            })
-            .catch((err) => {
-                reject(err);
-            });
-
-        fetch(createRequest({
-            method: 'post',
-            path: `/values/${sheetID}!${range}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
-            body: JSON.stringify({
-                values: [
-                    [entry.name, entry.price, entry.category, entry.date]
-                ]
-            })
-        }));
+                    if (response.ok) {
+                        return response.json()
+                    } else {
+                        reject(response.status)
+                    }
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        }
     });
 }
 
 export function replaceAllRows(sheetID, entries) {
     return new Promise((resolve, reject) => {
         const values = [],
-            datePrefix = date.getCurrentMonthYear(),
-            sheetIDToFetch = `${datePrefix}-${sheetID}`;
+            datePrefix = date.getCurrentMonthYear();
 
         entries.forEach((entry) => {
             values.push(Object.values(entry));
@@ -110,7 +132,7 @@ export function replaceAllRows(sheetID, entries) {
                 path: '/values:batchUpdate',
                 body: JSON.stringify({
                     data: {
-                        range: `!${sheetIDToFetch}!${range}`,
+                        range: `${sheetID}!${range}`,
                         values: values
                     },
                     valueInputOption: "USER_ENTERED",
@@ -128,19 +150,6 @@ export function replaceAllRows(sheetID, entries) {
                 reject(err);
             });
     });
-
-    fetch(createRequest({
-        method: 'post',
-        path: '/values:batchUpdate',
-        body: JSON.stringify({
-            data: {
-                range: `!${sheetID}!${range}`,
-                values: values
-            },
-            valueInputOption: "USER_ENTERED",
-            includeValuesInResponse: false
-        })
-    }));
 }
 
 function buildCreateSheetRequest(properties) {
