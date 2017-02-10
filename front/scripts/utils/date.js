@@ -1,8 +1,7 @@
 function formatDate (dateObject) {
-    const month = dateObject.getMonth() + 1 < 10
-        ? `0${dateObject.getMonth() + 1}` : dateObject.getMonth(),
-        day = dateObject.getDate() < 10
-        ? `0${dateObject.getDate()}` : dateObject.getDate();
+    // month indexing starts from 0 (????)
+    const month = formatMonth(dateObject.getMonth()),
+        day = appendZero(dateObject.getDate());
 
     return `${dateObject.getFullYear()}-${month}-${day}`;
 }
@@ -18,7 +17,14 @@ function filterToday (allEntries) {
 function getCurrentMonthYear () {
     const today = new Date();
 
-    return String(`${today.getMonth()}-${today.getFullYear()}`);
+    return String(`${formatMonth(today.getMonth())}-${today.getFullYear()}`);
+}
+
+function formatMonth(month) {
+    return appendZero(month+1);
+}
+function appendZero(index) {
+    return index < 10 ? `0${index}` : `${index}`;
 }
 
 export default {

@@ -3,17 +3,41 @@ import {
 } from 'utils/cookie';
 import sheetConfig from 'sheet.json';
 import date from 'utils/date';
+import random from 'utils/random';
 
 const range = 'A:D',
     numberOfColumns = 4;
 
 export function getAll(sheetID) {
     return new Promise(function (resolve, reject) {
-        console.log(date.getCurrentMonthYear());
-        const datePrefix = date.getCurrentMonthYear();
-        fetch(createRequest({
-                path: `/values/${sheetID}!${range}`
-            }))
+        const datePrefix = date.getCurrentMonthYear(),
+            sheetIDToFetch = `${datePrefix}-${sheetID}`;
+
+        //TODO optimiziation: make this request only once
+        fetch(createRequest())
+            .then((spreadSheetDataRaw) => {
+                if (spreadSheetDataRaw.ok) {
+                    return spreadSheetDataRaw.json();
+                } else {
+                    reject(response.status);
+                }
+            }).then((spreadSheetData) => {
+                const sheetToFetch = spreadSheetData.sheets.find((sheet) => {
+                    return sheet.properties.title === sheetIDToFetch;
+                });
+                if (sheetToFetch) {
+                    return fetch(createRequest({
+                        path: `/values/${sheetToFetch.properties.title}!${range}`
+                    }));
+                } else {
+                    //TODO some notification this request failed
+                    fetch(createRequest(buildCreateSheetRequest({
+                        sheetTitle: sheetIDToFetch
+                    })));
+
+                    return resolve({});
+                }
+            })
             .then((response) => {
                 if (response.ok) {
                     return response.json()
@@ -27,19 +51,19 @@ export function getAll(sheetID) {
             .catch((err) => {
                 reject(err);
             });
-        const createSheetReq = buildCreateSheetRequest();
-        console.log(createSheetReq);
-        fetch(createRequest(createSheetReq));
     });
 }
 
 export function addRow(sheetID, entry) {
     return new Promise((resolve, reject) => {
-        const formData = new FormData();
+        const formData = new FormData(),
+            datePrefix = date.getCurrentMonthYear(),
+            sheetIDToFetch = `${datePrefix}-${sheetID}`;
+
 
         fetch(createRequest({
                 method: 'post',
-                path: `/values/${sheetID}!${range}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
+                path: `/values/${sheetIDToFetch}!${range}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
                 body: JSON.stringify({
                     values: [
                         [entry.name, entry.price, entry.category, entry.date]
@@ -56,14 +80,25 @@ export function addRow(sheetID, entry) {
             .catch((err) => {
                 reject(err);
             });
+
+        fetch(createRequest({
+            method: 'post',
+            path: `/values/${sheetID}!${range}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
+            body: JSON.stringify({
+                values: [
+                    [entry.name, entry.price, entry.category, entry.date]
+                ]
+            })
+        }));
     });
 }
 
 export function replaceAllRows(sheetID, entries) {
     return new Promise((resolve, reject) => {
-        const values = [];
+        const values = [],
+            datePrefix = date.getCurrentMonthYear(),
+            sheetIDToFetch = `${datePrefix}-${sheetID}`;
 
-        const datePrefix = date.getCurrentMonthYear();
         entries.forEach((entry) => {
             values.push(Object.values(entry));
         });
@@ -75,7 +110,7 @@ export function replaceAllRows(sheetID, entries) {
                 path: '/values:batchUpdate',
                 body: JSON.stringify({
                     data: {
-                        range: `!${sheetID}!${range}`,
+                        range: `!${sheetIDToFetch}!${range}`,
                         values: values
                     },
                     valueInputOption: "USER_ENTERED",
@@ -93,9 +128,22 @@ export function replaceAllRows(sheetID, entries) {
                 reject(err);
             });
     });
+
+    fetch(createRequest({
+        method: 'post',
+        path: '/values:batchUpdate',
+        body: JSON.stringify({
+            data: {
+                range: `!${sheetID}!${range}`,
+                values: values
+            },
+            valueInputOption: "USER_ENTERED",
+            includeValuesInResponse: false
+        })
+    }));
 }
 
-function buildCreateSheetRequest() {
+function buildCreateSheetRequest(properties) {
     return {
         path: ':batchUpdate',
         body: JSON.stringify({
@@ -103,15 +151,15 @@ function buildCreateSheetRequest() {
             {
                 "addSheet": {
                     "properties": {
-                        sheetId: 10,
-                        title: "testSheet",
+                        sheetId: random.generateRandomInt(),
+                        title: properties.sheetTitle,
                         hidden: false
                     }
                 }
             }],
             "includeSpreadsheetInResponse": false,
             "responseRanges": [
-                "A:D"
+                range
             ],
             "responseIncludeGridData": false,
         }),
