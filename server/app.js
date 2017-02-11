@@ -1,5 +1,4 @@
 const express = require('express'),
-    app = express(),
     passport = require('passport'),
     auth = require('./auth'),
     webpack = require('webpack'),
@@ -9,7 +8,8 @@ const express = require('express'),
     path = require('path'),
     cookieParser = require('cookie-parser'),
     cookieSession = require('cookie-session'),
-    handlebars = require('express-handlebars');
+    handlebars = require('express-handlebars'),
+    app = express();
 
 app.engine('.hbs', handlebars({
     defaultLayout: 'index',
@@ -87,7 +87,7 @@ app.get('/auth/google/callback',
     }
 );
 
-app.get('/recent', (req, res) => {
+app.get('/balance', (req, res) => {
 
     res.render('index', {
         layout: false

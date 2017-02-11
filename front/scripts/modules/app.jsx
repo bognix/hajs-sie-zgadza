@@ -1,6 +1,6 @@
-import React from 'react';
-import LoginControl from './login';
 import {Link} from 'react-router';
+import LoginControl from './login';
+import React from 'react';
 
 export default class App extends React.Component {
     render () {

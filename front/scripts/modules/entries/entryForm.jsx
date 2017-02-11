@@ -10,37 +10,34 @@ export default class EntryForm extends React.Component {
             name: '',
             price: '',
             category: '',
-            date: date.formatDate(new Date())
+            date: date.formatDate(new Date()),
+            type: 'spend'
         };
-
     }
 
     handleNameChange (e) {
-
         this.setState({name: e.target.value});
-
     }
 
     handlePriceChange (e) {
-
         this.setState({price: e.target.value});
-
     }
 
     handleDateChange (e) {
-
         this.setState({date: e.target.value});
-
     }
 
     handleCategoryChange (e) {
-
         this.setState({category: e.target.value});
+    }
 
+    handleTypeChange(e) {
+        this.setState({
+            type: e.target.value
+        });
     }
 
     handleSubmit (e) {
-
         e.preventDefault();
 
         this.props.onEntrySubmit(this.state);
@@ -48,10 +45,10 @@ export default class EntryForm extends React.Component {
             name: '',
             price: '',
             category: '',
-            date: date.formatDate(new Date())
+            date: date.formatDate(new Date()),
+            type: 'spend'
         });
         this.firstInput.focus();
-
     }
 
     render () {
@@ -83,6 +80,16 @@ export default class EntryForm extends React.Component {
                     placeholder="kiedy..."
                     value={this.state.date}
                     onChange={this.handleDateChange.bind(this)}/>
+                Spend <input
+                    type="radio"
+                    name="type"
+                    value="spend"
+                    onChange={this.handleTypeChange.bind(this)}/>
+                Income <input
+                    type="radio"
+                    name="type"
+                    value="income"
+                    onChange={this.handleTypeChange.bind(this)} />
                 <input type="submit" value="+"/>
             </form>
         );

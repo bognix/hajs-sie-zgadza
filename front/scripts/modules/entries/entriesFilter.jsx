@@ -1,21 +1,21 @@
 import React from 'react';
 
 export default class EntriesFilter extends React.Component {
-    constructor(props) {
+    constructor (props) {
         super(props);
 
         this.state = {
             category: ''
-        }
+        };
 
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
     }
 
-    handleCategoryChange(e) {
+    handleCategoryChange (e) {
         this.props.onCategoryChange(e.target.value);
     }
 
-    render() {
+    render () {
         return (
             <form>
                 <input
@@ -24,6 +24,6 @@ export default class EntriesFilter extends React.Component {
                     value={this.props.category}
                     onChange={this.handleCategoryChange}/>
             </form>
-        )
+        );
     }
-};
+}

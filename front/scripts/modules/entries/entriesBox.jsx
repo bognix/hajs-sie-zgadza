@@ -4,25 +4,7 @@ import EntriesFilter from 'modules/entries/entriesFilter';
 import EntryForm from 'modules/entries/entryForm';
 
 export default class EntriesBox extends React.Component {
-
-    calculateTotalAmount (entries) {
-
-        let totalAmount = 0;
-
-        entries.forEach((entry) => {
-
-            totalAmount += parseInt(entry.price) || 0;
-
-        });
-
-        return totalAmount;
-
-    }
-
     render () {
-
-        const totalAmount = this.calculateTotalAmount(this.props.entries);
-
         return (
             <div>
                 <EntriesFilter
@@ -32,7 +14,6 @@ export default class EntriesBox extends React.Component {
                 <EntriesList
                     entries={this.props.entries}
                     onEntryRemoval={this.props.onEntryRemoval.bind(this)}/>
-                <div>Suma: {totalAmount}</div>
             </div>
         );
 

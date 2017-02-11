@@ -1,187 +1,185 @@
 import {
     getCookie
 } from 'utils/cookie';
-import sheetConfig from 'sheet.json';
-import date from 'utils/date';
 import random from 'utils/random';
+import sheetConfig from 'sheet.json';
 
-const range = 'A:D',
-    numberOfColumns = 4;
+const range = 'A:E',
+    numberOfColumns = 5;
 
 let existingSheets = [];
 
-export function getAll(sheetID) {
-    return new Promise(function (resolve, reject) {
+export function getAll (sheetID) {
+    return new Promise((resolve, reject) => {
 
-        //TODO optimiziation: make this request only once
-        fetch(createRequest())
-            .then((response) => {
+        // TODO optimiziation: make this request only once
+        fetch(createRequest()).
+            then((response) => {
                 if (response.ok) {
                     return response.json();
-                } else {
-                    reject(response.status);
                 }
-            }).then((spreadSheetData) => {
+                reject(response.status);
+
+            }).
+            then((spreadSheetData) => {
                 existingSheets = spreadSheetData.sheets;
 
-                const sheetToFetch = spreadSheetData.sheets.find((sheet) => {
-                    return sheet.properties.title === sheetID;
-                });
+                const sheetToFetch = spreadSheetData.sheets.find((sheet) => sheet.properties.title === sheetID);
 
                 if (sheetToFetch) {
                     return fetch(createRequest({
                         path: `/values/${sheetID}!${range}`
                     }));
-                } else {
-                    //TODO some notification this request failed
-                    fetch(createRequest(buildCreateSheetRequest({
-                        sheetTitle: sheetID
-                    })));
+                }
+                    // TODO some notification this request failed
+                fetch(createRequest(buildCreateSheetRequest({
+                    sheetTitle: sheetID
+                })));
 
-                    return resolve({});
-                }
-            })
-            .then((response) => {
+                return resolve({});
+
+            }).
+            then((response) => {
                 if (response.ok) {
-                    return response.json()
-                } else {
-                    reject(response.status)
+                    return response.json();
                 }
-            })
-            .then((data) => {
+                reject(response.status);
+
+            }).
+            then((data) => {
                 resolve(data);
-            })
-            .catch((err) => {
+            }).
+            catch((err) => {
                 reject(err);
             });
     });
 }
 
-export function addRow(sheetID, entry) {
+export function addRow (sheetID, entry) {
     return new Promise((resolve, reject) => {
-        const sheetToFetch = existingSheets.find((sheet) => {
-                return sheet.properties.title === sheetID;
-            });
+        const sheetToFetch = existingSheets.find((sheet) => sheet.properties.title === sheetID);
 
         if (!sheetToFetch) {
-            //TODO create decorator if sheet doesn't exitst to avoid if/else
+            // TODO create decorator if sheet doesn't exitst to avoid if/else
             fetch(createRequest(buildCreateSheetRequest({
-                    sheetTitle: sheetID
-                })))
-                .then(() => {
+                sheetTitle: sheetID
+            }))).
+                then(() => {
                     existingSheets.push({
                         title: sheetID
                     });
+
                     return fetch(createRequest({
                         method: 'post',
-                        path: `/values/${sheetID}!${range}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
+                        path: `/values/${sheetID}!${range}:append?valueInputOption=USER_ENTERED`,
                         body: JSON.stringify({
                             values: [
-                                [entry.name, entry.price, entry.category, entry.date]
-                            ]
+                                Object.values(entry)
+                            ],
+                            insertDataOption: 'INSERT_ROWS'
                         })
                     }));
-                })
-                .then((response) => {
+                }).
+                then((response) => {
                     if (response.ok) {
-                        return response.json()
-                    } else {
-                        reject(response.status)
+                        return response.json();
                     }
-                })
-                .catch((err) => {
+
+                    return reject(response.status);
+                }).
+                catch((err) => {
                     reject(err);
                 });
         } else {
             fetch(createRequest({
                 method: 'post',
-                path: `/values/${sheetID}!${range}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
+                path: `/values/${sheetID}!${range}:append?valueInputOption=USER_ENTERED`,
                 body: JSON.stringify({
                     values: [
-                        [entry.name, entry.price, entry.category, entry.date]
+                        Object.values(entry)
                     ]
                 })
-            }))
-            .then((response) => {
+            })).
+                then((response) => {
                     if (response.ok) {
-                        return response.json()
-                    } else {
-                        reject(response.status)
+                        return response.json();
                     }
-                })
-                .catch((err) => {
+
+                    return reject(response.status);
+                }).
+                catch((err) => {
                     reject(err);
                 });
         }
     });
 }
 
-export function replaceAllRows(sheetID, entries) {
+export function replaceAllRows (sheetID, entries) {
     return new Promise((resolve, reject) => {
-        const values = [],
-            datePrefix = date.getCurrentMonthYear();
+        const values = [];
 
         entries.forEach((entry) => {
             values.push(Object.values(entry));
         });
 
-        values.push(Array(numberOfColumns).fill(''));
+        values.push(Array(numberOfColumns).
+            fill(''));
 
         fetch(createRequest({
-                method: 'post',
-                path: '/values:batchUpdate',
-                body: JSON.stringify({
-                    data: {
-                        range: `${sheetID}!${range}`,
-                        values: values
-                    },
-                    valueInputOption: "USER_ENTERED",
-                    includeValuesInResponse: false
-                })
-            }))
-            .then((response) => {
-                if (response.ok) {
-                    return response.json()
-                } else {
-                    reject(response.status)
-                }
+            method: 'post',
+            path: '/values:batchUpdate',
+            body: JSON.stringify({
+                data: {
+                    range: `${sheetID}!${range}`,
+                    values
+                },
+                valueInputOption: "USER_ENTERED",
+                includeValuesInResponse: false
             })
-            .catch((err) => {
+        })).
+            then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+
+                return reject(response.status);
+            }).
+            catch((err) => {
                 reject(err);
             });
     });
 }
 
-function buildCreateSheetRequest(properties) {
+function buildCreateSheetRequest (properties) {
     return {
         path: ':batchUpdate',
         body: JSON.stringify({
             requests: [
-            {
-                "addSheet": {
-                    "properties": {
-                        sheetId: random.generateRandomInt(),
-                        title: properties.sheetTitle,
-                        hidden: false
+                {
+                    "addSheet": {
+                        "properties": {
+                            sheetId: random.generateRandomInt(),
+                            title: properties.sheetTitle,
+                            hidden: false
+                        }
                     }
-                }
-            }],
+                }],
             "includeSpreadsheetInResponse": false,
             "responseRanges": [
                 range
             ],
-            "responseIncludeGridData": false,
+            "responseIncludeGridData": false
         }),
         method: 'post'
-    }
+    };
 }
 
-function createRequest({
+function createRequest ({
     method = 'get',
     path = '',
     body = null
 } = {}) {
-    const spreadSheetId = sheetConfig.spreadSheetId,
+    const {spreadSheetId} = sheetConfig,
         token = getCookie('token'),
         authHeader = `Bearer ${token}`,
         requestConfig = {
@@ -197,7 +195,8 @@ function createRequest({
     if (body) {
         requestConfig.body = body;
     }
-    // path has to start with `/` if it's expected
+
+    // Path has to start with `/` if it's expected
     return new Request(`https://sheets.googleapis.com/v4/spreadsheets/${spreadSheetId}${path}`, requestConfig);
 }
 
@@ -205,4 +204,4 @@ export default {
     getAll,
     addRow,
     replaceAllRows
-}
+};

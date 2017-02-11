@@ -2,15 +2,11 @@ import React from 'react';
 
 export default class EntriesList extends React.Component {
     getEntries () {
-
         const allEntries = this.props.entries.map((entry) =>
                 <Entry
-                    name={entry.name}
-                    price={entry.price}
-                    date={entry.date}
-                    category={entry.category}
+                    entry={entry}
                     key={Math.floor(Math.random() * 1000)}
-                    onEntryRemoval={this.props.onEntryRemoval.bind(this, entry)}></Entry>
+                    onEntryRemoval={this.props.onEntryRemoval.bind(this, entry)}/>
             );
 
         return allEntries;
@@ -45,13 +41,12 @@ export default class EntriesList extends React.Component {
 
 export class Entry extends React.Component {
     render () {
-
         return (
-            <tr>
-                <td>{this.props.date}</td>
-                <td>{this.props.name}</td>
-                <td>{this.props.price}</td>
-                <td>{this.props.category}</td>
+            <tr className={this.props.entry.type}>
+                <td>{this.props.entry.date}</td>
+                <td>{this.props.entry.name}</td>
+                <td>{this.props.entry.price}</td>
+                <td>{this.props.entry.category}</td>
                 <td>
                     <button onClick={this.props.onEntryRemoval}>-</button>
                 </td>

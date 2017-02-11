@@ -1,5 +1,5 @@
 function formatDate (dateObject) {
-    // month indexing starts from 0 (????)
+    // Month indexing starts from 0 (????)
     const month = formatMonth(dateObject.getMonth()),
         day = appendZero(dateObject.getDate());
 
@@ -18,14 +18,14 @@ function getCurrentMonthYear () {
     return getMonthYear(new Date());
 }
 
-function getMonthYear(date) {
+function getMonthYear (date) {
     return String(`${formatMonth(date.getMonth())}-${date.getFullYear()}`);
 }
 
-function formatMonth(month) {
-    return appendZero(month+1);
+function formatMonth (month) {
+    return appendZero(month + 1);
 }
-function appendZero(index) {
+function appendZero (index) {
     return index < 10 ? `0${index}` : `${index}`;
 }
 
