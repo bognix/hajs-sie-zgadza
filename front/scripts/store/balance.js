@@ -1,7 +1,7 @@
 import date from 'utils/date';
 import store from 'store/entries';
 
-const incomes = [], spendings = [];
+let incomes = [], spendings = [];
 
 
 function get (sheetID) {
@@ -14,6 +14,9 @@ function getAll (datePrefix) {
     return new Promise((resolve) => {
         Promise.all([get(`${datePrefix}-incomes`), get(`${datePrefix}-spendings`)]).then((values) => {
             const [rawIncomes, rawSpendings] = values;
+
+            incomes = [];
+            spendings = [];
 
             rawIncomes.forEach((income) => {
                 incomes.push({

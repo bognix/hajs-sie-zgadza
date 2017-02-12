@@ -10,7 +10,7 @@ export default class App extends React.Component {
             <nav>
                 <ul>
                     <li>
-                        <Link to="/recent">Recent</Link>
+                        <Link to="/balance">Balance</Link>
                     </li>
                 </ul>
             </nav>

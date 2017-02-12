@@ -46,14 +46,24 @@ export default class Balance extends React.Component {
     }
 
     handlePreviousDateClick () {
-        this.setState({
-            selectedDate: date.subtractMonth(this.state.selectedDate)
+        const previousMonth = date.subtractMonth(this.state.selectedDate);
+
+        store.getAll(previousMonth).then((entries) => {
+            this.setState({
+                entries,
+                selectedDate: previousMonth
+            });
         });
     }
 
     handleForwardDateClick () {
-        this.setState({
-            selectedDate: date.addMonth(this.state.selectedDate)
+        const nextMonth = date.addMonth(this.state.selectedDate);
+
+        store.getAll(nextMonth).then((entries) => {
+            this.setState({
+                entries,
+                selectedDate: nextMonth
+            });
         });
     }
 
