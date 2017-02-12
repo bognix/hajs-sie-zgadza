@@ -33,7 +33,6 @@ function createRequest ({
     return new Request(`https://sheets.googleapis.com/v4/spreadsheets/${spreadSheetId}${path}`, requestConfig);
 }
 
-
 function buildCreateSheetRequest (properties) {
     return {
         path: ':batchUpdate',
@@ -58,108 +57,91 @@ function buildCreateSheetRequest (properties) {
     };
 }
 
-export function getAll (sheetID) {
-    return new Promise((resolve, reject) => {
+function createSheet (sheetID) {
+    const sheetToFetch = existingSheets.find((sheet) => sheet.properties.title === sheetID);
 
-        // TODO optimiziation: make this request only once
-        fetch(createRequest()).
+    return new Promise((resolve) => {
+        if (sheetToFetch) {
+            resolve();
+        } else {
+            existingSheets.push({
+                title: sheetID
+            });
+
+            fetch(createRequest(buildCreateSheetRequest({
+                sheetTitle: sheetID
+            }))).then(resolve);
+        }
+    });
+}
+
+function getSheets () {
+    return new Promise((resolve, reject) => {
+        if (existingSheets.length > 0) {
+            return resolve(existingSheets);
+        }
+
+        return fetch(createRequest()).
             then((response) => {
                 if (response.ok) {
                     return response.json();
                 }
-                reject(response.status);
 
+                return reject(response.json());
             }).
             then((spreadSheetData) => {
                 existingSheets = spreadSheetData.sheets;
-
-                const sheetToFetch = spreadSheetData.sheets.find((sheet) => sheet.properties.title === sheetID);
-
-                if (sheetToFetch) {
-                    return fetch(createRequest({
-                        path: `/values/${sheetID}!${range}`
-                    }));
-                }
-                    // TODO some notification this request failed
-                fetch(createRequest(buildCreateSheetRequest({
-                    sheetTitle: sheetID
-                })));
-
-                return resolve({});
-
-            }).
-            then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                reject(response.status);
-
-            }).
-            then((data) => {
-                resolve(data);
-            }).
-            catch((err) => {
-                reject(err);
+                resolve(existingSheets);
             });
+    });
+
+}
+export function getAll (sheetID) {
+    return new Promise((resolve, reject) => {
+
+        getSheets().then(() => createSheet(sheetID)).
+        then(() => fetch(createRequest({
+            path: `/values/${sheetID}!${range}`
+        }))).
+        then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+
+            return reject(response.status);
+        }).
+        then((data) => {
+            resolve(data);
+        }).
+        catch((err) => {
+            reject(err);
+        });
     });
 }
 
 export function addRow (sheetID, entry) {
     return new Promise((resolve, reject) => {
-        const sheetToFetch = existingSheets.find((sheet) => sheet.properties.title === sheetID);
-
-        if (!sheetToFetch) {
-            // TODO create decorator if sheet doesn't exitst to avoid if/else
-            fetch(createRequest(buildCreateSheetRequest({
-                sheetTitle: sheetID
-            }))).
-                then(() => {
-                    existingSheets.push({
-                        title: sheetID
-                    });
-
-                    return fetch(createRequest({
-                        method: 'post',
-                        path: `/values/${sheetID}!${range}:append?valueInputOption=USER_ENTERED`,
-                        body: JSON.stringify({
-                            values: [
-                                Object.values(entry)
-                            ],
-                            insertDataOption: 'INSERT_ROWS'
-                        })
-                    }));
-                }).
-                then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-
-                    return reject(response.status);
-                }).
-                catch((err) => {
-                    reject(err);
-                });
-        } else {
-            fetch(createRequest({
+        createSheet(sheetID).
+            then(() => fetch(createRequest({
                 method: 'post',
                 path: `/values/${sheetID}!${range}:append?valueInputOption=USER_ENTERED`,
                 body: JSON.stringify({
                     values: [
                         Object.values(entry)
-                    ]
+                    ],
+                    insertDataOption: 'INSERT_ROWS'
                 })
-            })).
-                then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
+            }))).
+            then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
 
-                    return reject(response.status);
-                }).
-                catch((err) => {
-                    reject(err);
-                });
-        }
+                return reject(response.status);
+            }).
+            catch((err) => {
+                reject(err);
+            });
     });
 }
 
