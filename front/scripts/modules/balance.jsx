@@ -1,5 +1,6 @@
 import date from 'utils/date';
 import EntriesBox from 'modules/entries/entriesBox';
+import Filter from 'modules/entries/filter';
 import React from 'react';
 import store from 'store/balance';
 
@@ -93,14 +94,16 @@ export default class Balance extends React.Component {
         } = this.calculateVisibleEntries();
 
         return <div>
+            <Filter
+                onInputValueChange={this.handleCategoryChange.bind(this)}
+                selectedDate={this.state.selectedDate}
+                onPrevDateClick={this.handlePreviousDateClick.bind(this)}
+                onForwardDateClick={this.handleForwardDateClick.bind(this)}
+                />
             <EntriesBox
                     entries = {visibleEntries}
-                    selectedDate = {this.state.selectedDate}
                     onEntrySubmit = {this.handleEntrySubmit.bind(this)}
-                    onEntryRemoval = {this.handleEntryRemoval.bind(this)}
-                    onFilterInputValueChange = {this.handleCategoryChange.bind(this)}
-                    onPrevDateClick = {this.handlePreviousDateClick.bind(this)}
-                    onForwardDateClick = {this.handleForwardDateClick.bind(this)} />
+                    onEntryRemoval = {this.handleEntryRemoval.bind(this)}/>
                 <span> Balance: </span><span>{balance}</span>
         </div>;
     }

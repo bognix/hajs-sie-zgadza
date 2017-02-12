@@ -1,6 +1,4 @@
-import {
-    getCookie
-} from 'utils/cookie';
+import {getCookie} from 'utils/cookie';
 import random from 'utils/random';
 import sheetConfig from 'sheet.json';
 
@@ -8,6 +6,57 @@ const range = 'A:E',
     numberOfColumns = 5;
 
 let existingSheets = [];
+
+function createRequest ({
+    method = 'get',
+    path = '',
+    body = null
+} = {}) {
+    const {spreadSheetId} = sheetConfig,
+        token = getCookie('token'),
+        authHeader = `Bearer ${token}`,
+        requestConfig = {
+            method,
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Authorization': authHeader
+            },
+            mode: 'cors',
+            cache: 'default'
+        };
+
+    if (body) {
+        requestConfig.body = body;
+    }
+
+    // Path has to start with `/` if it's expected
+    return new Request(`https://sheets.googleapis.com/v4/spreadsheets/${spreadSheetId}${path}`, requestConfig);
+}
+
+
+function buildCreateSheetRequest (properties) {
+    return {
+        path: ':batchUpdate',
+        body: JSON.stringify({
+            requests: [
+                {
+                    "addSheet": {
+                        "properties": {
+                            sheetId: random.generateRandomInt(),
+                            title: properties.sheetTitle,
+                            hidden: false
+                        }
+                    }
+                }],
+            "includeSpreadsheetInResponse": false,
+            "responseRanges": [
+                range
+            ],
+            "responseIncludeGridData": false
+        }),
+        method: 'post'
+    };
+}
 
 export function getAll (sheetID) {
     return new Promise((resolve, reject) => {
@@ -148,56 +197,6 @@ export function replaceAllRows (sheetID, entries) {
                 reject(err);
             });
     });
-}
-
-function buildCreateSheetRequest (properties) {
-    return {
-        path: ':batchUpdate',
-        body: JSON.stringify({
-            requests: [
-                {
-                    "addSheet": {
-                        "properties": {
-                            sheetId: random.generateRandomInt(),
-                            title: properties.sheetTitle,
-                            hidden: false
-                        }
-                    }
-                }],
-            "includeSpreadsheetInResponse": false,
-            "responseRanges": [
-                range
-            ],
-            "responseIncludeGridData": false
-        }),
-        method: 'post'
-    };
-}
-
-function createRequest ({
-    method = 'get',
-    path = '',
-    body = null
-} = {}) {
-    const {spreadSheetId} = sheetConfig,
-        token = getCookie('token'),
-        authHeader = `Bearer ${token}`,
-        requestConfig = {
-            method,
-            headers: {
-                'Content-Type': 'application/json; charset=UTF-8',
-                'Authorization': authHeader
-            },
-            mode: 'cors',
-            cache: 'default'
-        };
-
-    if (body) {
-        requestConfig.body = body;
-    }
-
-    // Path has to start with `/` if it's expected
-    return new Request(`https://sheets.googleapis.com/v4/spreadsheets/${spreadSheetId}${path}`, requestConfig);
 }
 
 export default {

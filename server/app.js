@@ -95,6 +95,14 @@ app.get('/balance', (req, res) => {
 
 });
 
+app.get('/planner', (req, res) => {
+
+    res.render('index', {
+        layout: false
+    });
+
+});
+
 app.listen(3000, () => {
 
     console.log('Server is running on port 3000');
