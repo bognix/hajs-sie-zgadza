@@ -1,5 +1,5 @@
-import React from 'react';
 import date from 'utils/date';
+import React from 'react';
 
 export default class EntryForm extends React.Component {
     constructor (props) {
@@ -31,7 +31,7 @@ export default class EntryForm extends React.Component {
         this.setState({category: e.target.value});
     }
 
-    handleTypeChange(e) {
+    handleTypeChange (e) {
         this.setState({
             type: e.target.value
         });

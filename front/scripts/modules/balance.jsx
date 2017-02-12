@@ -50,8 +50,8 @@ export default class Balance extends React.Component {
         allEntries.forEach((entry) => {
             if (!this.state.category || entry.category.indexOf(this.state.category) === 0) {
                 balance = entry.type === 'spend'
-                    ? balance -= parseInt(entry.price)
-                    : balance += parseInt(entry.price);
+                    ? balance -= parseInt(entry.price, 10)
+                    : balance += parseInt(entry.price, 10);
                 visibleEntries.push(entry);
             }
         });
@@ -73,7 +73,7 @@ export default class Balance extends React.Component {
                     entries = {visibleEntries}
                     onEntrySubmit = {this.handleEntrySubmit.bind(this)}
                     onEntryRemoval = {this.handleEntryRemoval.bind(this)}
-                    onCategoryChange = {this.handleCategoryChange.bind(this)}/>
+                    onFilterInputValueChange = {this.handleCategoryChange.bind(this)}/>
                 <span> Balance: </span><span>{balance}</span>
         </div>;
     }

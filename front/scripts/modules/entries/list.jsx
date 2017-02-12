@@ -1,3 +1,4 @@
+import random from 'utils/random';
 import React from 'react';
 
 export default class EntriesList extends React.Component {
@@ -5,7 +6,7 @@ export default class EntriesList extends React.Component {
         const allEntries = this.props.entries.map((entry) =>
                 <Entry
                     entry={entry}
-                    key={Math.floor(Math.random() * 1000)}
+                    key={random.generateRandomInt()}
                     onEntryRemoval={this.props.onEntryRemoval.bind(this, entry)}/>
             );
 
@@ -29,7 +30,6 @@ export default class EntriesList extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {/* TODO optimize so iterating twice through all passed entries is redundant {this.getEntries()} */}
                         {this.getEntries()}
                     </tbody>
                 </table>
