@@ -9,7 +9,8 @@ export default class Balance extends React.Component {
 
         this.state = {
             entries: [],
-            category: ''
+            category: '',
+            selectedDate: ''
         };
     }
 
@@ -18,7 +19,8 @@ export default class Balance extends React.Component {
 
         store.getAll(dateToFetch).
             then((entries) => {
-                this.setState({entries});
+                this.setState({entries,
+                    selectedDate: dateToFetch});
             }).
             catch(() => {
                 // TODO notification about failed fetch
@@ -40,6 +42,18 @@ export default class Balance extends React.Component {
     handleCategoryChange (category) {
         this.setState({
             category
+        });
+    }
+
+    handlePreviousDateClick () {
+        this.setState({
+            selectedDate: date.subtractMonth(this.state.selectedDate)
+        });
+    }
+
+    handleForwardDateClick () {
+        this.setState({
+            selectedDate: date.addMonth(this.state.selectedDate)
         });
     }
 
@@ -71,9 +85,12 @@ export default class Balance extends React.Component {
         return <div>
             <EntriesBox
                     entries = {visibleEntries}
+                    selectedDate = {this.state.selectedDate}
                     onEntrySubmit = {this.handleEntrySubmit.bind(this)}
                     onEntryRemoval = {this.handleEntryRemoval.bind(this)}
-                    onFilterInputValueChange = {this.handleCategoryChange.bind(this)}/>
+                    onFilterInputValueChange = {this.handleCategoryChange.bind(this)}
+                    onPrevDateClick = {this.handlePreviousDateClick.bind(this)}
+                    onForwardDateClick = {this.handleForwardDateClick.bind(this)} />
                 <span> Balance: </span><span>{balance}</span>
         </div>;
     }

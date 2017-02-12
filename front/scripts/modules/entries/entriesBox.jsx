@@ -8,7 +8,11 @@ export default class EntriesBox extends React.Component {
         return (
             <div>
                 <Filter
-                    onInputValueChange={this.props.onFilterInputValueChange.bind(this)}/>
+                    onInputValueChange={this.props.onFilterInputValueChange.bind(this)}
+                    selectedDate={this.props.selectedDate}
+                    onPrevDateClick={this.props.onPrevDateClick}
+                    onForwardDateClick={this.props.onForwardDateClick}
+                    />
                 <EntryForm onEntrySubmit={this.props.onEntrySubmit.bind(this)}/>
                 <List
                     entries={this.props.entries}
