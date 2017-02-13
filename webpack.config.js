@@ -1,24 +1,24 @@
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 const extractSass = new ExtractTextPlugin({
-    filename: "app.css"
-});
+        filename: "app.css"
+    }), extractFont = new ExtractTextPlugin({
+        filename: "Roboto-Regular.ttf"
+    });
 
 
 module.exports = {
     entry: [
-        'webpack/hot/dev-server',
-        'webpack-hot-middleware/client',
-        './front/scripts/index.js',
-        './front/styles/app.scss'
+        './front/scripts/index.js'
     ],
     output: {
         path: '/',
         filename: 'bundle.js',
-        publicPath: 'http://localhost:3000/public/'
+        publicPath: '/public/'
     },
     plugins: [
-        extractSass
+        extractSass,
+        extractFont
     ],
     module: {
         rules: [{
@@ -43,17 +43,19 @@ module.exports = {
             })
         }, {
             test: /\.ttf$/,
-            loaders: 'file-loader'
+            loaders: ExtractTextPlugin.extract({
+                use: 'file-loader'
+            })
         }]
     },
     resolve: {
-        extensions: ['.js', '.jsx', '.json', '.scss'],
+        extensions: ['.js', '.jsx', '.json', '.scss', '.ttf'],
         modules: [
             'front/scripts',
             'config',
             'node_modules',
             'front/styles',
-            'resources/fonts'
+            'resources/fonts/roboto'
         ]
     },
     devtool: 'source-map'

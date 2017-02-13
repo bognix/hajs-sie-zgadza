@@ -5,8 +5,8 @@ import Planner from 'modules/planner';
 import React from 'react';
 import {render} from 'react-dom';
 
-// @TODO extract css to seperate file so they are not included via JS
 import 'app.scss';
+import 'Roboto-Regular.ttf';
 
 render(
     <Router history={browserHistory}>

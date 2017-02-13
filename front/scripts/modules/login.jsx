@@ -1,5 +1,5 @@
-import React from 'react';
 import {getCookie} from '../utils/cookie';
+import React from 'react';
 
 export default class LoginControl extends React.Component {
     constructor (props) {
@@ -16,9 +16,9 @@ export default class LoginControl extends React.Component {
     }
 
     render () {
-        const link = !this.state.isLoggedIn
-            ? <a href="/auth/google">Log In using Google</a>
-            : <a href="/logout">Logout</a>;
+        const link = this.state.isLoggedIn
+            ? <a href="/logout">Logout</a>
+            : <a href="/auth/google">Log In using Google</a>;
 
 
         return (
