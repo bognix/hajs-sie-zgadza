@@ -1,6 +1,7 @@
 import date from 'utils/date';
 import EntriesBox from 'modules/entries/entriesBox';
 import Filter from 'modules/entries/filter';
+import plannerStore from 'store/planner';
 import React from 'react';
 import store from 'store/balance';
 
@@ -68,6 +69,14 @@ export default class Balance extends React.Component {
         });
     }
 
+    handleImportPlannedClick () {
+        plannerStore.getAll().then((plannedEntries) => {
+            this.setState({
+                entries: store.addMany(this.state.entries, plannedEntries)
+            });
+        });
+    }
+
     calculateVisibleEntries () {
         const allEntries = this.state.entries, visibleEntries = [];
         let balance = 0;
@@ -100,6 +109,7 @@ export default class Balance extends React.Component {
                 onPrevDateClick={this.handlePreviousDateClick.bind(this)}
                 onForwardDateClick={this.handleForwardDateClick.bind(this)}
                 />
+            <input type="button" value="Import Planned" onClick={this.handleImportPlannedClick.bind(this)}/>
             <EntriesBox
                     entries = {visibleEntries}
                     onEntrySubmit = {this.handleEntrySubmit.bind(this)}

@@ -6,7 +6,7 @@ import React from 'react';
 import {render} from 'react-dom';
 
 // @TODO extract css to seperate file so they are not included via JS
-// Import 'app.scss';
+import 'app.scss';
 
 render(
     <Router history={browserHistory}>

@@ -1,4 +1,9 @@
-var path = require('path');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+const extractSass = new ExtractTextPlugin({
+    filename: "app.css"
+});
+
 
 module.exports = {
     entry: [
@@ -10,9 +15,11 @@ module.exports = {
     output: {
         path: '/',
         filename: 'bundle.js',
-        publicPath: 'http://localhost:3000/scripts/'
+        publicPath: 'http://localhost:3000/public/'
     },
-    plugins: [],
+    plugins: [
+        extractSass
+    ],
     module: {
         rules: [{
             test: /\.js*/,
@@ -27,7 +34,16 @@ module.exports = {
             loader: 'json-loader'
         }, {
             test: /\.scss$/,
-            loaders: ["style-loader", "css-loader", "sass-loader"]
+            loader: extractSass.extract({
+                loader: [{
+                    loader: "css-loader"
+                }, {
+                    loader: "sass-loader"
+                }]
+            })
+        }, {
+            test: /\.ttf$/,
+            loaders: 'file-loader'
         }]
     },
     resolve: {
@@ -36,7 +52,8 @@ module.exports = {
             'front/scripts',
             'config',
             'node_modules',
-            'front/styles'
+            'front/styles',
+            'resources/fonts'
         ]
     },
     devtool: 'source-map'

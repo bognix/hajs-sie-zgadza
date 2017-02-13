@@ -1,0 +1,17 @@
+.navigation {
+    background-color: $primaryDark;
+    color: $primaryLight;
+    height: 40px;
+
+    .nav-item {
+        display: inline-block;
+    }
+
+    ul {
+        list-style: none;
+
+        li {
+            display: inherit;
+        }
+    }
+}

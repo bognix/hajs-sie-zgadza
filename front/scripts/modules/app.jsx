@@ -6,9 +6,9 @@ export default class App extends React.Component {
     render () {
 
         return <div>
-            <LoginControl/>
-            <nav>
-                <ul>
+            <nav className="navigation">
+                <LoginControl/>
+                <ul className="nav-item">
                     <li>
                         <Link to="/balance">Balance</Link>
                     </li>

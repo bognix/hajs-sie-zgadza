@@ -21,8 +21,8 @@ export default class LoginControl extends React.Component {
             : <a href="/logout">Logout</a>;
 
 
-        return <div>
-            {link}
-        </div>;
+        return (
+            <div className="nav-item">{link}</div>
+        );
     }
 }

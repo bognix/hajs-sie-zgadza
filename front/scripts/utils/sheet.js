@@ -119,17 +119,14 @@ export function getAll (sheetID) {
     });
 }
 
-export function addRow (sheetID, entry) {
+export function addRow (sheetID, values) {
     return new Promise((resolve, reject) => {
         createSheet(sheetID).
             then(() => fetch(createRequest({
                 method: 'post',
-                path: `/values/${sheetID}!${range}:append?valueInputOption=USER_ENTERED`,
+                path: `/values/${sheetID}!${range}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
                 body: JSON.stringify({
-                    values: [
-                        Object.values(entry)
-                    ],
-                    insertDataOption: 'INSERT_ROWS'
+                    values
                 })
             }))).
             then((response) => {

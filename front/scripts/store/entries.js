@@ -15,7 +15,17 @@ export function getAll (sheetID) {
 }
 
 export function add (sheetID, entry) {
-    sheet.addRow(sheetID, entry);
+    sheet.addRow(sheetID, [Object.values(entry)]);
+}
+
+export function addMany (sheetID, entries) {
+    const values = [];
+
+    entries.forEach((entry) => {
+        values.push(Object.values(entry));
+    });
+
+    sheet.addRow(sheetID, values);
 }
 
 export function replaceAll (sheetID, entries) {
@@ -25,5 +35,6 @@ export function replaceAll (sheetID, entries) {
 export default {
     getAll,
     add,
+    addMany,
     replaceAll
 };

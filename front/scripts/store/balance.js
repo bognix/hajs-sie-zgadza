@@ -64,6 +64,25 @@ function add (allEntries, toAdd) {
     return allEntries;
 }
 
+function addMany (allEntries, toAdd) {
+    const incomesToAdd = [], spendingsToAdd = [],
+        incomesSheetID = `${date.getMonthYear(new Date())}-incomes`,
+        spendingsSheetID = `${date.getMonthYear(new Date())}-spendings`;
+
+    toAdd.forEach((entryToAdd) => {
+        if (entryToAdd.type === 'spend') {
+            spendingsToAdd.push(entryToAdd);
+        } else {
+            incomesToAdd.push(entryToAdd);
+        }
+    });
+
+    store.addMany(incomesSheetID, incomesToAdd);
+    store.addMany(spendingsSheetID, spendingsToAdd);
+
+    return allEntries.concat(incomesToAdd, spendingsToAdd);
+}
+
 function remove (allEntries, toRemove) {
     let sheetSuffix = '', toReplace = [];
 
@@ -88,6 +107,7 @@ function remove (allEntries, toRemove) {
 
 export default {
     add,
+    addMany,
     getAll,
     remove
 };
