@@ -8,7 +8,7 @@ export default class App extends React.Component {
         return <div>
             <nav className="navigation">
                 <LoginControl/>
-                <ul className="nav-item">
+                <ul>
                     <li>
                         <Link to="/balance">Balance</Link>
                     </li>

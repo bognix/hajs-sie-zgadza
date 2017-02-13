@@ -1,17 +1,20 @@
 .navigation {
+    align-items: center;
     background-color: $primaryDark;
     color: $primaryLight;
+    display: flex;
+    flex-wrap: nowrap;
     height: 40px;
-
-    .nav-item {
-        display: inline-block;
-    }
+    justify-content: flex-end;
 
     ul {
+        display: inherit;
         list-style: none;
 
         li {
-            display: inherit;
+            // align-self: center;
+            // list-style: none;
+            // display: inherit;
         }
     }
 }
