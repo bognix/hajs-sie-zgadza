@@ -1,20 +1,22 @@
-const express = require('express'),
-    authConfig = require('../config/auth');
+const express = require('express');
 
 const router = express.Router();
 
-console.log('------------------', authConfig);
+router.get('/', (req, res) => {
+
+    res.render('index', {
+        layout: false,
+    });
+});
 
 router.get('/balance', (req, res) => {
     res.render('index', {
-        clientId: authConfig.googleAuth.clientId,
         layout: false,
     });
 });
 
 router.get('/planner', (req, res) => {
     res.render('index', {
-        clientId: authConfig.googleAuth.clientId,
         layout: false,
     });
 });

@@ -1,113 +1,136 @@
+import createSheetApi from 'store/sheets/sheetApiFactory';
 import date from 'utils/date';
 import store from 'store/entries';
 
-let incomes = [], spendings = [];
+let createdStore = null;
 
-
-function get (sheetID) {
-    return new Promise((resolve) => {
-        store.getAll(sheetID).then((data) => resolve(data));
+function getStore (token) {
+    const sheetApi = createSheetApi({
+        token,
+        range: 'A:E',
+        numberOfColumns: 5
     });
-}
+    let incomes = [], spendings = [];
 
-function getAll (datePrefix) {
-    return new Promise((resolve) => {
-        Promise.all([get(`${datePrefix}-incomes`), get(`${datePrefix}-spendings`)]).then((values) => {
-            const [rawIncomes, rawSpendings] = values;
-
-            incomes = [];
-            spendings = [];
-
-            rawIncomes.forEach((income) => {
-                incomes.push({
-                    name: income[0],
-                    price: income[1],
-                    category: income[2],
-                    date: income[3],
-                    type: 'income'
-                });
-            });
-
-            rawSpendings.forEach((spend) => {
-                spendings.push({
-                    name: spend[0],
-                    price: spend[1],
-                    category: spend[2],
-                    date: spend[3],
-                    type: 'spend'
-                });
-            });
-
-            resolve(incomes.concat(spendings));
+    function get (sheetID) {
+        return new Promise((resolve) => {
+            store.getAll(sheetApi, sheetID).then((data) => resolve(data));
         });
-    });
-}
-
-
-function add (allEntries, toAdd) {
-    let sheetSuffix = '';
-
-    if (toAdd.type === 'spend') {
-        sheetSuffix = 'spendings';
-        spendings.push(toAdd);
-    } else {
-        sheetSuffix = 'incomes';
-        incomes.push(toAdd);
     }
 
-    const sheetID = `${date.getMonthYear(new Date())}-${sheetSuffix}`;
+    function getAll (datePrefix) {
+        return new Promise((resolve) => {
+            Promise.all([get(`${datePrefix}-incomes`), get(`${datePrefix}-spendings`)]).then((values) => {
+                const [rawIncomes, rawSpendings] = values;
 
-    store.add(sheetID, toAdd);
+                incomes = [];
+                spendings = [];
 
-    allEntries.push(toAdd);
+                rawIncomes.forEach((income) => {
+                    incomes.push({
+                        name: income[0],
+                        price: income[1],
+                        category: income[2],
+                        date: income[3],
+                        type: 'income'
+                    });
+                });
 
-    return allEntries;
-}
+                rawSpendings.forEach((spend) => {
+                    spendings.push({
+                        name: spend[0],
+                        price: spend[1],
+                        category: spend[2],
+                        date: spend[3],
+                        type: 'spend'
+                    });
+                });
 
-function addMany (allEntries, toAdd) {
-    const incomesToAdd = [], spendingsToAdd = [],
-        incomesSheetID = `${date.getMonthYear(new Date())}-incomes`,
-        spendingsSheetID = `${date.getMonthYear(new Date())}-spendings`;
+                resolve(incomes.concat(spendings));
+            });
+        });
+    }
 
-    toAdd.forEach((entryToAdd) => {
-        if (entryToAdd.type === 'spend') {
-            spendingsToAdd.push(entryToAdd);
+
+    function add (allEntries, toAdd) {
+        let sheetSuffix = '';
+
+        if (toAdd.type === 'spend') {
+            sheetSuffix = 'spendings';
+            spendings.push(toAdd);
         } else {
-            incomesToAdd.push(entryToAdd);
+            sheetSuffix = 'incomes';
+            incomes.push(toAdd);
         }
-    });
 
-    store.addMany(incomesSheetID, incomesToAdd);
-    store.addMany(spendingsSheetID, spendingsToAdd);
+        const sheetID = `${date.getMonthYear(new Date())}-${sheetSuffix}`;
 
-    return allEntries.concat(incomesToAdd, spendingsToAdd);
-}
+        store.add(sheetApi, sheetID, toAdd);
 
-function remove (allEntries, toRemove) {
-    let sheetSuffix = '', toReplace = [];
+        allEntries.push(toAdd);
 
-    if (toRemove.type === 'spend') {
-        sheetSuffix = 'spendings';
-        toReplace = spendings;
-    } else {
-        sheetSuffix = 'incomes';
-        toReplace = incomes;
+        return allEntries;
     }
 
-    toReplace.splice(toReplace.indexOf(toRemove), 1);
+    function addMany (allEntries, toAdd) {
+        const incomesToAdd = [], spendingsToAdd = [],
+            incomesSheetID = `${date.getMonthYear(new Date())}-incomes`,
+            spendingsSheetID = `${date.getMonthYear(new Date())}-spendings`;
 
-    const sheetID = `${date.getMonthYear(new Date(toRemove.date))}-${sheetSuffix}`;
+        toAdd.forEach((entryToAdd) => {
+            if (entryToAdd.type === 'spend') {
+                spendingsToAdd.push(entryToAdd);
+            } else {
+                incomesToAdd.push(entryToAdd);
+            }
+        });
 
-    store.replaceAll(sheetID, toReplace);
+        store.addMany(sheetApi, incomesSheetID, incomesToAdd);
+        store.addMany(sheetApi, spendingsSheetID, spendingsToAdd);
 
-    allEntries.splice(allEntries.indexOf(toRemove), 1);
+        return allEntries.concat(incomesToAdd, spendingsToAdd);
+    }
 
-    return allEntries;
+    function remove (allEntries, toRemove) {
+        let sheetSuffix = '', toReplace = [];
+
+        if (toRemove.type === 'spend') {
+            sheetSuffix = 'spendings';
+            toReplace = spendings;
+        } else {
+            sheetSuffix = 'incomes';
+            toReplace = incomes;
+        }
+
+        toReplace.splice(toReplace.indexOf(toRemove), 1);
+
+        const sheetID = `${date.getMonthYear(new Date(toRemove.date))}-${sheetSuffix}`;
+
+        store.replaceAll(sheetApi, sheetID, toReplace);
+
+        allEntries.splice(allEntries.indexOf(toRemove), 1);
+
+        return allEntries;
+    }
+
+    createdStore = {
+        add,
+        addMany,
+        getAll,
+        remove
+    };
+
+    return createdStore;
+}
+
+function getStoreInstance (...args) {
+    if (createdStore) {
+        return createdStore;
+    }
+
+    return getStore(...args);
 }
 
 export default {
-    add,
-    addMany,
-    getAll,
-    remove
+    getStoreInstance
 };

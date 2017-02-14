@@ -1,84 +1,107 @@
+import createSheetApi from 'store/sheets/sheetApiFactory';
 import store from 'store/entries';
 
-let incomes = [], spendings = [];
+const storeInstance = null;
 
-function get (sheetID) {
-    return new Promise((resolve) => {
-        store.getAll(sheetID).then((data) => resolve(data));
+function getStore (token) {
+    const sheetApi = createSheetApi({
+        token,
+        range: 'A:E',
+        numberOfColumns: 5
     });
-}
 
-function getAll () {
-    return new Promise((resolve) => {
-        Promise.all([get('planned-incomes'), get('planned-spendings')]).then((values) => {
-            const [rawIncomes, rawSpendings] = values;
+    let incomes = [], spendings = [];
 
-            incomes = [];
-            spendings = [];
-
-            rawIncomes.forEach((income) => {
-                incomes.push({
-                    name: income[0],
-                    price: income[1],
-                    category: income[2],
-                    date: income[3],
-                    type: 'income'
-                });
-            });
-
-            rawSpendings.forEach((spend) => {
-                spendings.push({
-                    name: spend[0],
-                    price: spend[1],
-                    category: spend[2],
-                    date: spend[3],
-                    type: 'spend'
-                });
-            });
-
-            resolve(incomes.concat(spendings));
+    function get (sheetID) {
+        return new Promise((resolve) => {
+            store.getAll(sheetApi, sheetID).then((data) => resolve(data));
         });
-    });
-}
-
-
-function add (allEntries, toAdd) {
-    let sheetID = '';
-
-    if (toAdd.type === 'spend') {
-        sheetID = 'planned-spendings';
-        spendings.push(toAdd);
-    } else {
-        sheetID = 'planned-incomes';
-        incomes.push(toAdd);
     }
 
-    store.add(sheetID, toAdd);
-    allEntries.push(toAdd);
+    function getAll () {
+        return new Promise((resolve) => {
+            Promise.all([get('planned-incomes'), get('planned-spendings')]).then((values) => {
+                const [rawIncomes, rawSpendings] = values;
 
-    return allEntries;
-}
+                incomes = [];
+                spendings = [];
 
-function remove (allEntries, toRemove) {
-    let sheetID = '', toReplace = [];
+                rawIncomes.forEach((income) => {
+                    incomes.push({
+                        name: income[0],
+                        price: income[1],
+                        category: income[2],
+                        date: income[3],
+                        type: 'income'
+                    });
+                });
 
-    if (toRemove.type === 'spend') {
-        sheetID = 'planned-spendings';
-        toReplace = spendings;
-    } else {
-        sheetID = 'planned-incomes';
-        toReplace = incomes;
+                rawSpendings.forEach((spend) => {
+                    spendings.push({
+                        name: spend[0],
+                        price: spend[1],
+                        category: spend[2],
+                        date: spend[3],
+                        type: 'spend'
+                    });
+                });
+
+                resolve(incomes.concat(spendings));
+            });
+        });
     }
 
-    toReplace.splice(toReplace.indexOf(toRemove), 1);
-    allEntries.splice(allEntries.indexOf(toRemove), 1);
-    store.replaceAll(sheetID, toReplace);
+    function add (allEntries, toAdd) {
+        let sheetID = '';
 
-    return allEntries;
+        if (toAdd.type === 'spend') {
+            sheetID = 'planned-spendings';
+            spendings.push(toAdd);
+        } else {
+            sheetID = 'planned-incomes';
+            incomes.push(toAdd);
+        }
+
+        store.add(sheetApi, sheetID, toAdd);
+        allEntries.push(toAdd);
+
+        return allEntries;
+    }
+
+    function remove (allEntries, toRemove) {
+        let sheetID = '', toReplace = [];
+
+        if (toRemove.type === 'spend') {
+            sheetID = 'planned-spendings';
+            toReplace = spendings;
+        } else {
+            sheetID = 'planned-incomes';
+            toReplace = incomes;
+        }
+
+        toReplace.splice(toReplace.indexOf(toRemove), 1);
+        allEntries.splice(allEntries.indexOf(toRemove), 1);
+        store.replaceAll(sheetApi, sheetID, toReplace);
+
+        return allEntries;
+    }
+
+    return {
+        add,
+        getAll,
+        remove
+    };
+
+}
+
+function getStoreInstance (...args) {
+    if (storeInstance) {
+        return storeInstance;
+    }
+
+    return getStore(...args);
 }
 
 export default {
-    add,
-    getAll,
-    remove
+    getStoreInstance
 };

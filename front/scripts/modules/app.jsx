@@ -2,8 +2,18 @@ import Navigation from 'modules/navigation';
 import React from 'react';
 
 export default class App extends React.Component {
-    handleSuccessfulLogin () {
+    constructor (props) {
+        super(props);
 
+        this.state = {
+            token: ''
+        };
+    }
+
+    handleSuccessfulLogin (authData) {
+        this.setState({
+            token: authData.access_token
+        });
     }
 
     render () {
@@ -11,7 +21,9 @@ export default class App extends React.Component {
         return (
         <div>
             <Navigation onLoginSuccess={this.handleSuccessfulLogin.bind(this)}/>
-                {this.props.children}
+                {this.props.children && React.cloneElement(this.props.children, {
+                    token: this.state.token
+                })}
         </div>);
     }
 }

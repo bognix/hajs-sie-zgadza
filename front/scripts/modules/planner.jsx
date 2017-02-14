@@ -14,7 +14,19 @@ export default class Planner extends React.Component {
     }
 
     componentDidMount () {
-        store.getAll().
+        if (this.props.token) {
+            store.getStoreInstance(this.props.token).getAll().
+                then((entries) => {
+                    this.setState({entries});
+                }).
+                catch(() => {
+                    // TODO notification about failed fetch
+                });
+        }
+    }
+
+    componentWillReceiveProps (nextProps) {
+        store.getStoreInstance(nextProps.token).getAll().
             then((entries) => {
                 this.setState({entries});
             }).
@@ -25,13 +37,13 @@ export default class Planner extends React.Component {
 
     handleEntrySubmit (entry) {
         this.setState({
-            entries: store.add(this.state.entries, entry)
+            entries: store.getStoreInstance().add(this.state.entries, entry)
         });
     }
 
     handleEntryRemoval (entry) {
         this.setState({
-            entries: store.remove(this.state.entries, entry)
+            entries: store.getStoreInstance().remove(this.state.entries, entry)
         });
     }
 

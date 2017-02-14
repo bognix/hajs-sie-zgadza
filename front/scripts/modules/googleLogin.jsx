@@ -1,5 +1,4 @@
 import React from 'react';
-import store from 'store/googleLogin';
 
 export default class LoginControl extends React.Component {
     constructor (props) {

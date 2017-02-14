@@ -10,6 +10,5 @@
     "rules": {
         "node/exports-style": ["error", "module.exports"],
         "node/no-deprecated-api": "error",
-
     }
 }

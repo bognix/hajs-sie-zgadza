@@ -17,9 +17,24 @@ export default class Balance extends React.Component {
     }
 
     componentDidMount () {
+        if (this.props.token) {
+            const dateToFetch = date.getCurrentMonthYear();
+
+            store.getStoreInstance(this.props.token).getAll(dateToFetch).
+                then((entries) => {
+                    this.setState({entries,
+                        selectedDate: dateToFetch});
+                }).
+                catch(() => {
+                    // TODO notification about failed fetch
+                });
+        }
+    }
+
+    componentWillReceiveProps (nextProps) {
         const dateToFetch = date.getCurrentMonthYear();
 
-        store.getAll(dateToFetch).
+        store.getStoreInstance(nextProps.token).getAll(dateToFetch).
             then((entries) => {
                 this.setState({entries,
                     selectedDate: dateToFetch});
@@ -31,13 +46,13 @@ export default class Balance extends React.Component {
 
     handleEntrySubmit (entry) {
         this.setState({
-            entries: store.add(this.state.entries, entry)
+            entries: store.getStoreInstance().add(this.state.entries, entry)
         });
     }
 
     handleEntryRemoval (entry) {
         this.setState({
-            entries: store.remove(this.state.entries, entry)
+            entries: store.getStoreInstance().remove(this.state.entries, entry)
         });
     }
 
@@ -50,7 +65,8 @@ export default class Balance extends React.Component {
     handlePreviousDateClick () {
         const previousMonth = date.subtractMonth(this.state.selectedDate);
 
-        store.getAll(previousMonth).then((entries) => {
+        store.getStoreInstance().getAll(previousMonth).
+        then((entries) => {
             this.setState({
                 entries,
                 selectedDate: previousMonth
@@ -61,7 +77,8 @@ export default class Balance extends React.Component {
     handleForwardDateClick () {
         const nextMonth = date.addMonth(this.state.selectedDate);
 
-        store.getAll(nextMonth).then((entries) => {
+        store.getStoreInstance().getAll(nextMonth).
+        then((entries) => {
             this.setState({
                 entries,
                 selectedDate: nextMonth
@@ -70,9 +87,10 @@ export default class Balance extends React.Component {
     }
 
     handleImportPlannedClick () {
-        plannerStore.getAll().then((plannedEntries) => {
+        plannerStore.getStoreInstance(this.props.token).getAll().
+        then((plannedEntries) => {
             this.setState({
-                entries: store.addMany(this.state.entries, plannedEntries)
+                entries: store.getStoreInstance().addMany(this.state.entries, plannedEntries)
             });
         });
     }
