@@ -1,15 +1,9 @@
-import createSheetApi from 'store/sheets/sheetApiFactory';
 import date from 'utils/date';
 import store from 'store/entries';
 
 let createdStore = null;
 
-function getStore (token) {
-    const sheetApi = createSheetApi({
-        token,
-        range: 'A:E',
-        numberOfColumns: 5
-    });
+function getStore (sheetApi) {
     let incomes = [], spendings = [];
 
     function get (sheetID) {

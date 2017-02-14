@@ -1,4 +1,5 @@
 function getAll (sheetApi, sheetID) {
+
     return new Promise((resolve, reject) => {
         sheetApi.getAll(sheetID).then((data) => {
             if (!data.values) {

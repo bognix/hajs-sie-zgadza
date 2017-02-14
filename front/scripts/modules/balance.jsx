@@ -17,10 +17,18 @@ export default class Balance extends React.Component {
     }
 
     componentDidMount () {
-        if (this.props.token) {
+        this.fetchAll(this.props.sheetApi);
+    }
+
+    componentWillReceiveProps (nextProps) {
+        this.fetchAll(nextProps.sheetApi);
+    }
+
+    fetchAll (sheetApi) {
+        if (sheetApi) {
             const dateToFetch = date.getCurrentMonthYear();
 
-            store.getStoreInstance(this.props.token).getAll(dateToFetch).
+            store.getStoreInstance(sheetApi).getAll(dateToFetch).
                 then((entries) => {
                     this.setState({entries,
                         selectedDate: dateToFetch});
@@ -28,20 +36,10 @@ export default class Balance extends React.Component {
                 catch(() => {
                     // TODO notification about failed fetch
                 });
+        } else {
+            // TODO notification
+            console.log('sheetApi not defined');
         }
-    }
-
-    componentWillReceiveProps (nextProps) {
-        const dateToFetch = date.getCurrentMonthYear();
-
-        store.getStoreInstance(nextProps.token).getAll(dateToFetch).
-            then((entries) => {
-                this.setState({entries,
-                    selectedDate: dateToFetch});
-            }).
-            catch(() => {
-                // TODO notification about failed fetch
-            });
     }
 
     handleEntrySubmit (entry) {
@@ -87,7 +85,7 @@ export default class Balance extends React.Component {
     }
 
     handleImportPlannedClick () {
-        plannerStore.getStoreInstance(this.props.token).getAll().
+        plannerStore.getStoreInstance(this.props.sheetApi).getAll().
         then((plannedEntries) => {
             this.setState({
                 entries: store.getStoreInstance().addMany(this.state.entries, plannedEntries)

@@ -1,3 +1,4 @@
+import createSheetApi from 'store/sheets/sheetApiFactory';
 import Navigation from 'modules/navigation';
 import React from 'react';
 
@@ -6,14 +7,26 @@ export default class App extends React.Component {
         super(props);
 
         this.state = {
-            token: ''
+            sheetApi: null
         };
     }
 
     handleSuccessfulLogin (authData) {
-        this.setState({
-            token: authData.access_token
-        });
+        if (authData.access_token) {
+            const sheetApi = createSheetApi({
+                token: authData.access_token,
+                range: 'A:E',
+                numberOfColumns: 5
+            });
+
+            this.setState({
+                sheetApi
+            });
+        } else {
+            this.setState({
+                sheetApi: null
+            });
+        }
     }
 
     render () {
@@ -22,7 +35,7 @@ export default class App extends React.Component {
         <div>
             <Navigation onLoginSuccess={this.handleSuccessfulLogin.bind(this)}/>
                 {this.props.children && React.cloneElement(this.props.children, {
-                    token: this.state.token
+                    sheetApi: this.state.sheetApi
                 })}
         </div>);
     }

@@ -36,7 +36,8 @@ export default class LoginControl extends React.Component {
     }
 
     logout () {
-        window.gapi.auth2.getAuthInstance().signOut().then(() => {
+        window.gapi.auth2.getAuthInstance().signOut().
+        then(() => {
             // TODO fix cannot read style of undefined error
             this.setState({
                 loggedIn: false
@@ -52,6 +53,8 @@ export default class LoginControl extends React.Component {
             ? <a href="#" onClick={this.logout.bind(this)}>Sign Out</a>
             : <div id="google-login-button"/>;
         }
+
+        return null;
     }
 
     renderGoogleButton () {
@@ -59,7 +62,7 @@ export default class LoginControl extends React.Component {
             'scope': 'profile email https://www.googleapis.com/auth/spreadsheets',
             'height': 32,
             'theme': 'dark',
-            'onsuccess': (response) => {
+            'onsuccess': () => {
                 this.setState({
                     loggedIn: true,
                     loaded: true

@@ -14,25 +14,11 @@ export default class Planner extends React.Component {
     }
 
     componentDidMount () {
-        if (this.props.token) {
-            store.getStoreInstance(this.props.token).getAll().
-                then((entries) => {
-                    this.setState({entries});
-                }).
-                catch(() => {
-                    // TODO notification about failed fetch
-                });
-        }
+        this.fetchAll(this.props.sheetApi);
     }
 
     componentWillReceiveProps (nextProps) {
-        store.getStoreInstance(nextProps.token).getAll().
-            then((entries) => {
-                this.setState({entries});
-            }).
-            catch(() => {
-                // TODO notification about failed fetch
-            });
+        this.fetchAll(nextProps.sheetApi);
     }
 
     handleEntrySubmit (entry) {
@@ -65,6 +51,21 @@ export default class Planner extends React.Component {
         });
 
         return balance;
+    }
+
+    fetchAll (sheetApi) {
+        if (sheetApi) {
+            store.getStoreInstance(sheetApi).getAll().
+                then((entries) => {
+                    this.setState({entries});
+                }).
+                catch(() => {
+                    // TODO notification about failed fetch
+                });
+        } else {
+            // TODO notification
+            console.log('sheetApi not defined');
+        }
     }
 
     render () {
