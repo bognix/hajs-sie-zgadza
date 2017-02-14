@@ -8,7 +8,10 @@
     justify-content: flex-end;
 
     ul {
-        display: inherit;
         list-style: none;
+    }
+
+    .nav-item {
+        display: flex;
     }
 }

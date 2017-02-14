@@ -1,14 +1,14 @@
 const express = require('express'),
     passport = require('passport'),
     auth = require('./auth'),
+    authConfig = require('../config/auth'),
     webpack = require('webpack'),
     webpackDevMiddleware = require('webpack-dev-middleware'),
-    webpackHotMiddleware = require('webpack-hot-middleware'),
     config = require('./../webpack.config'),
-    path = require('path'),
     cookieParser = require('cookie-parser'),
     cookieSession = require('cookie-session'),
     handlebars = require('express-handlebars'),
+    router = require('./router'),
     app = express();
 
 app.engine('.hbs', handlebars({
@@ -29,17 +29,13 @@ app.use(cookieParser());
 auth(passport);
 app.use(passport.initialize());
 config.plugins.push(new webpack.HotModuleReplacementPlugin());
-compiler = webpack(config);
+const compiler = webpack(config);
 
 app.use(webpackDevMiddleware(compiler, {
     publicPath: config.output.publicPath,
     stats: {
         colors: true
     }
-}));
-
-app.use(webpackHotMiddleware(compiler, {
-    log: console.log
 }));
 
 app.get('/', (req, res) => {
@@ -57,9 +53,9 @@ app.get('/', (req, res) => {
     }
 
     res.render('index', {
-        layout: false
+        clientId: authConfig.googleAuth.clientId,
+        layout: false,
     });
-
 });
 
 app.get('/auth/google', passport.authenticate('google', {
@@ -87,21 +83,7 @@ app.get('/auth/google/callback',
     }
 );
 
-app.get('/balance', (req, res) => {
-
-    res.render('index', {
-        layout: false
-    });
-
-});
-
-app.get('/planner', (req, res) => {
-
-    res.render('index', {
-        layout: false
-    });
-
-});
+app.use(router);
 
 app.listen(3000, () => {
 

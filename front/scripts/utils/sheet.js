@@ -1,4 +1,4 @@
-import {getCookie} from 'utils/cookie';
+import googleLoginStore from 'store/googleLogin';
 import random from 'utils/random';
 import sheetConfig from 'sheet.json';
 
@@ -13,7 +13,7 @@ function createRequest ({
     body = null
 } = {}) {
     const {spreadSheetId} = sheetConfig,
-        token = getCookie('token'),
+        token = googleLoginStore.getToken(),
         authHeader = `Bearer ${token}`,
         requestConfig = {
             method,
