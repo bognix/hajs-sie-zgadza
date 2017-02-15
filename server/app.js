@@ -6,6 +6,8 @@ const express = require('express'),
     router = require('./router'),
     app = express();
 
+app.use(express.static(__dirname + '/public/')); //Don't forget me :(
+
 app.engine('.hbs', handlebars({
     defaultLayout: 'index',
     extname: '.hbs'

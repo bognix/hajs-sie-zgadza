@@ -8,10 +8,18 @@
     justify-content: flex-end;
 
     ul {
+        align-items: center;
+        display: flex;
         list-style: none;
     }
 
     .nav-item {
-        display: flex;
+        padding: 0 1rem;
+    }
+
+    .logo {
+        font-weight: bold;
+        flex-grow: 1;
+        color: $dollarGreen;
     }
 }

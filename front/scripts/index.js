@@ -6,7 +6,6 @@ import React from 'react';
 import {render} from 'react-dom';
 
 import 'app.scss';
-import 'Roboto-Regular.ttf';
 
 render(
     <Router history={browserHistory}>
