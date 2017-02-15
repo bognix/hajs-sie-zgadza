@@ -84,14 +84,14 @@ export default class EntryForm extends React.Component {
                             onChange={this.handleDateChange.bind(this)}/>
                         </td>
                         <td className="flex">
-                            <label className="flex radio-input"><input
+                            <label className="flex radio-input type-spend"><input
                                 type="radio"
                                 name="type"
                                 value="spend"
                                 onChange={this.handleTypeChange.bind(this)}/>
                             <span className="label">Spend</span>
                             </label>
-                            <label className="flex radio-input"><input
+                            <label className="flex radio-input type-income"><input
                                 type="radio"
                                 name="type"
                                 value="income"
