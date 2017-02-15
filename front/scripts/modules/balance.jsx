@@ -118,19 +118,19 @@ export default class Balance extends React.Component {
             visibleEntries
         } = this.calculateVisibleEntries();
 
-        return <div>
+        return <div className="table column-8">
             <Filter
                 onInputValueChange={this.handleCategoryChange.bind(this)}
                 selectedDate={this.state.selectedDate}
                 onPrevDateClick={this.handlePreviousDateClick.bind(this)}
                 onForwardDateClick={this.handleForwardDateClick.bind(this)}
                 />
-            <input type="button" value="Import Planned" onClick={this.handleImportPlannedClick.bind(this)}/>
             <EntriesBox
                     entries = {visibleEntries}
                     onEntrySubmit = {this.handleEntrySubmit.bind(this)}
                     onEntryRemoval = {this.handleEntryRemoval.bind(this)}/>
                 <span> Balance: </span><span>{balance}</span>
+                <input type="button" value="Import Planned" onClick={this.handleImportPlannedClick.bind(this)}/>
         </div>;
     }
 }

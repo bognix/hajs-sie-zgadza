@@ -1,0 +1,33 @@
+.date-picker {
+    color: $secondaryDark;
+    display: flex;
+    height: 2rem;
+    flex-grow: 1;
+    align-items: center;
+
+    .stretch {
+        flex-grow: 1;
+        font-size: 1.5rem;
+        text-align: center;
+        background: none;
+        border: none;
+        border-bottom: 1px solid $dollarGreen;
+    }
+
+    .button {
+        background: none;
+        border: none;
+        width: 20%;
+        font-size: 2rem;
+        cursor: pointer;
+    }
+}
+
+.table {
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    text-align: center;
+}

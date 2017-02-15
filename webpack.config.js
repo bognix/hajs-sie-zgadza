@@ -40,19 +40,23 @@ module.exports = {
             })
         }, {
             test: /\.ttf$/,
-            loader: 'file-loader'
+            loader: 'file-loader?name=[name].[ext]'
         }, {
             test: /\.css$/,
             loader: 'css-loader'
+        }, {
+            test: /\.svg$/,
+            loader: 'file-loader?name=[name].[ext]'
         }]
     },
     resolve: {
-        extensions: ['.js', '.jsx', '.json', '.scss', '.css', '.ttf'],
+        extensions: ['.js', '.jsx', '.json', '.scss', '.css', '.ttf', '.svg'],
         modules: [
             'front/scripts',
             'config',
             'node_modules',
-            'front/styles'
+            'front/styles',
+            'front/resources'
         ]
     },
     devtool: 'source-map'

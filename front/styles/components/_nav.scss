@@ -6,6 +6,7 @@
     flex-wrap: nowrap;
     height: 40px;
     justify-content: flex-end;
+    margin-bottom: 2rem;
 
     ul {
         align-items: center;
@@ -21,5 +22,6 @@
         font-weight: bold;
         flex-grow: 1;
         color: $dollarGreen;
+        margin: 0 0 0 1rem;
     }
 }

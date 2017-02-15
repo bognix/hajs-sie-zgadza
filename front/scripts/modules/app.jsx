@@ -34,9 +34,11 @@ export default class App extends React.Component {
         return (
         <div>
             <Navigation onLoginSuccess={this.handleSuccessfulLogin.bind(this)}/>
+            <div className="container">
                 {this.props.children && React.cloneElement(this.props.children, {
                     sheetApi: this.state.sheetApi
                 })}
+            </div>
         </div>);
     }
 }

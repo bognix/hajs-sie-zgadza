@@ -11,15 +11,15 @@ export default class Filter extends React.Component {
     render () {
         return (
             <form>
-                <input
-                    type="text"
-                    placeholder="filter..."
-                    onChange={this.onInputValueChange.bind(this)}/>
                 <DatePicker
                     selectedDate={this.props.selectedDate}
                     onPrevClick={this.props.onPrevDateClick.bind(this)}
                     onForwardClick={this.props.onForwardDateClick.bind(this)}
                     />
+                    <input
+                        type="text"
+                        placeholder="filter..."
+                        onChange={this.onInputValueChange.bind(this)}/>
             </form>
         );
     }
