@@ -1,5 +1,6 @@
 import random from 'utils/random';
 import React from 'react';
+import RowForm from 'modules/entries/rowForm';
 
 export default class EntriesList extends React.Component {
     getEntries () {
@@ -18,38 +19,37 @@ export default class EntriesList extends React.Component {
     render () {
 
         return (
-            <div className="entries-list">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Kiedy</th>
-                            <th>Co</th>
-                            <th>Za ile</th>
-                            <th>Kategoria</th>
-                            <th>Usuń</th>
-                        </tr>
-                    </thead>
+            <form>
+                <table className="flex-table">
                     <tbody>
-                        {this.getEntries()}
+                    <tr className="table-header">
+                        <td>What</td>
+                        <td>Price</td>
+                        <td>Category</td>
+                        <td>When</td>
+                        <td className="last"/>
+                    </tr>
+                    <RowForm onEntrySubmit={this.props.onEntrySubmit.bind(this)}/>
+                    {this.getEntries()}
                     </tbody>
                 </table>
-            </div>
+            </form>
         );
-
     }
 }
 
 export class Entry extends React.Component {
     render () {
+        const className = `type-${this.props.entry.type}`;
+
+
         return (
-            <tr className={this.props.entry.type}>
-                <td>{this.props.entry.date}</td>
+            <tr className={className}>
                 <td>{this.props.entry.name}</td>
                 <td>{this.props.entry.price}</td>
                 <td>{this.props.entry.category}</td>
-                <td>
-                    <button onClick={this.props.onEntryRemoval}>-</button>
-                </td>
+                <td>{this.props.entry.date}</td>
+                <td className="last"><button onClick={this.props.onEntryRemoval}>-</button></td>
             </tr>
         );
 

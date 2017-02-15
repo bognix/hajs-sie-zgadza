@@ -15,3 +15,13 @@ ul {
 svg {
     pointer-events: none;
 }
+
+input[type=date]::-webkit-clear-button,
+input[type=date]::-webkit-inner-spin-button {
+    display: none;
+}
+
+input {
+    border: inherit;
+    outline: 0;
+}

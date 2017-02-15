@@ -6,6 +6,7 @@ import React from 'react';
 import {render} from 'react-dom';
 
 import 'app.scss';
+import 'icons/ic_add_black_24px.svg';
 import 'icons/ic_chevron_left_black_24px.svg';
 import 'icons/ic_chevron_right_black_24px.svg';
 

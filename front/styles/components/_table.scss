@@ -2,12 +2,9 @@
     color: $secondaryDark;
     display: flex;
     height: 2rem;
-    flex-grow: 1;
     align-items: center;
 
     .stretch {
-        flex-grow: 1;
-        font-size: 1.5rem;
         text-align: center;
         background: none;
         border: none;
@@ -15,19 +12,42 @@
     }
 
     .button {
-        background: none;
-        border: none;
         width: 20%;
-        font-size: 2rem;
         cursor: pointer;
+        text-align: center;
     }
 }
 
-.table {
+.flex, .last {
     display: flex;
-    flex-direction: column;
 }
 
-.container {
-    text-align: center;
+.flex-table {
+    tr {
+        display: flex;
+        height: 2rem;
+        align-items: center;
+    }
+
+    td {
+        width: 150px;
+        padding: 0;
+    }
+}
+
+.text-input {
+    font-size: 1rem;
+    border: none;
+    border-bottom: 1px solid $secondaryDark;
+    padding: 0;
+    width: inherit;
+    height: inherit;
+}
+
+.table-header {
+    font-weight: 300;
+}
+
+.table-form td {
+    height: inherit;
 }
