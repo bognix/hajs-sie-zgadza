@@ -15,6 +15,7 @@ import 'icons/ic_cancel_black_24px.svg';
 import 'icons/ic_clear_black_24px.svg';
 import 'icons/ic_search_black_24px.svg';
 import 'icons/ic_file_download_black_24px.svg';
+import 'icons/ic_attach_money_black_24px.svg';
 
 render(
     <Router history={browserHistory}>

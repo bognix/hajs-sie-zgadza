@@ -4,6 +4,7 @@ import Filter from 'modules/entries/filter';
 import plannerStore from 'store/planner';
 import React from 'react';
 import store from 'store/balance';
+import Spinner from 'modules/spinner';
 
 export default class Balance extends React.Component {
     constructor (props) {
@@ -12,7 +13,8 @@ export default class Balance extends React.Component {
         this.state = {
             entries: [],
             category: '',
-            selectedDate: ''
+            selectedDate: '',
+            loaded: false
         };
     }
 
@@ -30,8 +32,11 @@ export default class Balance extends React.Component {
 
             store.getStoreInstance(sheetApi).getAll(dateToFetch).
                 then((entries) => {
-                    this.setState({entries,
-                        selectedDate: dateToFetch});
+                    this.setState({
+                        entries,
+                        selectedDate: dateToFetch,
+                        loaded: true
+                    });
                 }).
                 catch(() => {
                     // TODO notification about failed fetch
@@ -63,11 +68,16 @@ export default class Balance extends React.Component {
     handlePreviousDateClick () {
         const previousMonth = date.subtractMonth(this.state.selectedDate);
 
+        this.setState({
+            loaded: false
+        });
+
         store.getStoreInstance().getAll(previousMonth).
         then((entries) => {
             this.setState({
                 entries,
-                selectedDate: previousMonth
+                selectedDate: previousMonth,
+                loaded: true
             });
         });
     }
@@ -75,20 +85,30 @@ export default class Balance extends React.Component {
     handleForwardDateClick () {
         const nextMonth = date.addMonth(this.state.selectedDate);
 
+        this.setState({
+            loaded: false
+        });
+
         store.getStoreInstance().getAll(nextMonth).
         then((entries) => {
             this.setState({
                 entries,
-                selectedDate: nextMonth
+                selectedDate: nextMonth,
+                loaded: true
             });
         });
     }
 
     handleImportPlannedClick () {
+        this.setState({
+            loaded: false
+        });
+
         plannerStore.getStoreInstance(this.props.sheetApi).getAll().
         then((plannedEntries) => {
             this.setState({
-                entries: store.getStoreInstance().addMany(this.state.entries, plannedEntries)
+                entries: store.getStoreInstance().addMany(this.state.entries, plannedEntries),
+                loaded: true
             });
         });
     }
@@ -119,9 +139,11 @@ export default class Balance extends React.Component {
         } = this.calculateVisibleEntries();
 
         const balanceClass = balance > 0 ? 'balance green' : 'balance red';
+        const className = this.state.loaded ? "wrapper" : "wrapper loading";
 
-        return <div className="wrapper">
+        return <div className={className}>
             <h2>Montly Balance</h2>
+            <Spinner visible={!this.state.loaded}/>
             <Filter
                 onInputValueChange={this.handleCategoryChange.bind(this)}
                 selectedDate={this.state.selectedDate}

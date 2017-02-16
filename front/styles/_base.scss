@@ -42,8 +42,13 @@ input {
     margin: 0 auto;
     text-align: initial;
     display: inline-block;
+    position: relative;
 }
 
 .container {
     text-align: center;
+}
+
+.hidden {
+    display: none;
 }
