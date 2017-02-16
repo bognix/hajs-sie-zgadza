@@ -64,7 +64,9 @@ export default function create (params) {
                 resolve();
             } else {
                 existingSheets.push({
-                    title: sheetID
+                    properties: {
+                        title: sheetID
+                    }
                 });
 
                 fetch(createRequest(buildCreateSheetRequest({
