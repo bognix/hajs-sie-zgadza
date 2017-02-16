@@ -10,7 +10,7 @@ export default class Filter extends React.Component {
 
     render () {
         return (
-            <form className="flex">
+            <form>
                 <DatePicker
                     selectedDate={this.props.selectedDate}
                     onPrevClick={this.props.onPrevDateClick.bind(this)}

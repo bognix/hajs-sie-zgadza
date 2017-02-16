@@ -19,29 +19,81 @@
 }
 
 .flex-table {
+    margin: auto;
+
     button {
         background: none;
         border: none;
         padding: 0;
-    }
+        width: 2.5rem;
+        height: 2.5rem;
+        cursor: pointer;
 
-    tr {
-        display: flex;
-        height: 3rem;
-        align-items: center;
-    }
-
-    td {
-        width: 150px;
-        padding: 0;
-
-        &.flex {
-            width: initial;
+        &:hover {
+            border: 1px solid $secondaryDark;
+            border-radius: 30px;
         }
     }
 
-    .flex, .last {
-        display: flex;
+    div {
+        width: 24px;
+        height: 24px;
+        margin: auto;
+    }
+
+    td {
+        width: 120px;
+        padding: 0;
+    }
+
+    .first {
+        width: 100px;
+    }
+
+    .last {
+        width: 50px;
+    }
+
+    tr {
+        align-items: center;
+        min-height: 3rem;
+
+        &.type-income {
+            border-bottom: 1px solid $lightGreen;
+
+            &:hover {
+                border-bottom: 1px solid $dollarGreen;
+            }
+
+            button:hover {
+                border-color: $mediumGreen;
+                svg {
+                    fill: $dollarGreen;
+                }
+            }
+        }
+
+        &.type-spend {
+            border-bottom: 1px solid $lightRed;
+
+            &:hover {
+                border-bottom: 1px solid $darkRed;
+            }
+
+            button:hover {
+                border-color: $mediumRed;
+                svg {
+                    fill: $darkRed;
+                }
+            }
+        }
+    }
+
+    .table-form  {
+        .first {
+            flex-direction: column;
+            padding-right: 20px;
+        }
     }
 }
 
@@ -49,33 +101,25 @@
     font-size: 1rem;
     border: none;
     padding: 0;
-    width: inherit;
-    height: inherit;
+    font-style: italic;
+    font-weight: 300;
+    color: $primaryDark;
+
+    &::-webkit-input-placeholder {
+        font-weight: 100;
+        color: $dark;
+    }
 }
 
 .table-header {
     font-weight: 300;
 }
 
-.table-form  {
-    border-bottom: 1px solid $secondaryDark;
-
-    td {
-        height: inherit;
-
-        input {
-            font-style: italic;
-            font-weight: 100;
-        }
-    }
-}
-
 .radio-input {
-    align-items: center;
-    width: 100px;
-    flex-grow: 1;
-    justify-content: center;
     cursor: pointer;
+    align-self: flex-start;
+    font-style: italic;
+    color: $primaryDark;
 
     input {
         visibility: hidden;
@@ -96,48 +140,6 @@
     &.type-spend {
         svg {
             fill: $mediumRed;
-        }
-    }
-}
-
-.type-income {
-    border-bottom: 1px solid $lightGreen;
-
-    &:hover {
-            border-bottom: 1px solid $dollarGreen;
-    }
-
-    button {
-        width: 2.5rem;
-        height: 2.5rem;
-        cursor: pointer;
-    }
-
-    div {
-        width: 24px;
-        height: 24px;
-        margin: auto;
-    }
-
-    button:hover {
-        border: 1px solid $mediumGreen;
-        border-radius: 30px;
-        svg {
-            fill: $dollarGreen;
-        }
-    }
-}
-
-.type-spend {
-    border-bottom: 1px solid $lightRed;
-
-    &:hover {
-        td {
-            background-color: $lightRed;
-        }
-
-        .last {
-            background: none;
         }
     }
 }

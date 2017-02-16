@@ -118,7 +118,7 @@ export default class Balance extends React.Component {
             visibleEntries
         } = this.calculateVisibleEntries();
 
-        return <div className="table column-8">
+        return <div>
             <Filter
                 onInputValueChange={this.handleCategoryChange.bind(this)}
                 selectedDate={this.state.selectedDate}

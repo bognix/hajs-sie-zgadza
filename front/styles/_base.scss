@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
 }
@@ -28,4 +32,8 @@ input[type=date]::-webkit-inner-spin-button {
 input {
     border: inherit;
     outline: 0;
+}
+
+.flex {
+    display: flex;
 }

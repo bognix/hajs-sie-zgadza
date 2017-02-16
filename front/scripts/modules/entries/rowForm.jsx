@@ -16,6 +16,10 @@ export default class EntryForm extends React.Component {
         };
     }
 
+    componentDidMount () {
+        this.firstInput.focus();
+    }
+
     handleNameChange (e) {
         this.setState({name: e.target.value});
     }
@@ -57,7 +61,26 @@ export default class EntryForm extends React.Component {
         const radioIconUnchecked = <ReactSVG path="/public/ic_radio_button_unchecked_black_24px.svg" />;
 
         return (
-                    <tr className="table-form">
+                    <tr className="table-form flex">
+                        <td className="first flex">
+                            <label className="radio-input type-spend flex"><input
+                                type="radio"
+                                name="type"
+                                value="spend"
+                                checked={this.state.type === 'spend'}
+                                onChange={this.handleTypeChange.bind(this)}/>
+                                {this.state.type === 'spend' ? radioIconChecked : radioIconUnchecked}
+                            <span className="label">Spend</span>
+                            </label>
+                            <label className="radio-input type-income flex"><input
+                                type="radio"
+                                name="type"
+                                value="income"
+                                checked={this.state.type === 'income'}
+                                onChange={this.handleTypeChange.bind(this)} />
+                            {this.state.type === 'income' ? radioIconChecked : radioIconUnchecked}
+                            <span className="label">Income</span></label>
+                        </td>
                         <td>
                             <input className="text-input"
                                 type="text"
@@ -86,24 +109,7 @@ export default class EntryForm extends React.Component {
                             value={this.state.date}
                             onChange={this.handleDateChange.bind(this)}/>
                         </td>
-                        <td className="flex">
-                            <label className="flex radio-input type-spend"><input
-                                type="radio"
-                                name="type"
-                                value="spend"
-                                checked={this.state.type === 'spend'}
-                                onChange={this.handleTypeChange.bind(this)}/>
-                                {this.state.type === 'spend' ? radioIconChecked : radioIconUnchecked}
-                            <span className="label">Spend</span>
-                            </label>
-                            <label className="flex radio-input type-income"><input
-                                type="radio"
-                                name="type"
-                                value="income"
-                                checked={this.state.type === 'income'}
-                                onChange={this.handleTypeChange.bind(this)} />
-                            {this.state.type === 'income' ? radioIconChecked : radioIconUnchecked}
-                            <span className="label">Income</span></label>
+                        <td className="last">
                             <button className="button-input" onClick={this.handleSubmit.bind(this)} type="submit"><ReactSVG path="/public/ic_add_black_24px.svg"/></button>
                         </td>
                     </tr>

@@ -23,7 +23,8 @@ export default class EntriesList extends React.Component {
             <form>
                 <table className="flex-table">
                     <tbody>
-                    <tr className="table-header">
+                    <tr className="table-header flex">
+                        <td className="first"/>
                         <td>What</td>
                         <td>Price</td>
                         <td>Category</td>
@@ -41,12 +42,13 @@ export default class EntriesList extends React.Component {
 
 export class Entry extends React.Component {
     render () {
-        const className = `type-${this.props.entry.type}`,
+        const className = `type-${this.props.entry.type} flex`,
             removeButton = <ReactSVG path="/public/ic_clear_black_24px.svg"/>;
 
 
         return (
             <tr className={className}>
+                <td className="first" />
                 <td>{this.props.entry.name}</td>
                 <td>{this.props.entry.price}</td>
                 <td>{this.props.entry.category}</td>
