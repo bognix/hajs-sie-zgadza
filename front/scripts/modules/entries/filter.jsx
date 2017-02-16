@@ -21,8 +21,12 @@ export default class Filter extends React.Component {
                     <ReactSVG path="/public/ic_search_black_24px.svg" />
                         <input
                             type="text"
-                            placeholder="filter..."
+                            placeholder="filter by category..."
                             onChange={this.onInputValueChange.bind(this)}/>
+                </div>
+                <div className="import" onClick={this.props.onImportClick.bind(this)}>
+                    <ReactSVG path="/public/ic_file_download_black_24px.svg" />
+                    <span>Import Planned</span>
                 </div>
             </form>
         );

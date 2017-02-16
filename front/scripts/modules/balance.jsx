@@ -121,18 +121,19 @@ export default class Balance extends React.Component {
         const balanceClass = balance > 0 ? 'balance green' : 'balance red';
 
         return <div className="wrapper">
+            <h2>Montly Balance</h2>
             <Filter
                 onInputValueChange={this.handleCategoryChange.bind(this)}
                 selectedDate={this.state.selectedDate}
                 onPrevDateClick={this.handlePreviousDateClick.bind(this)}
                 onForwardDateClick={this.handleForwardDateClick.bind(this)}
+                onImportClick={this.handleImportPlannedClick.bind(this)}
                 />
             <EntriesBox
                     entries = {visibleEntries}
                     onEntrySubmit = {this.handleEntrySubmit.bind(this)}
                     onEntryRemoval = {this.handleEntryRemoval.bind(this)}/>
                 <div className={balanceClass} ><span> Balance: </span><span>{balance}</span></div>
-                <input type="button" value="Import Planned" onClick={this.handleImportPlannedClick.bind(this)}/>
         </div>;
     }
 }

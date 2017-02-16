@@ -70,13 +70,15 @@ export default class Planner extends React.Component {
 
     render () {
         const balance = this.calculateBalance();
+        const balanceClass = balance > 0 ? 'balance green' : 'balance red';
 
-        return <div>
+        return <div className="wrapper">
+            <h2>Planned Expenses</h2>
             <EntriesBox
                     entries = {this.state.entries}
                     onEntrySubmit = {this.handleEntrySubmit.bind(this)}
                     onEntryRemoval = {this.handleEntryRemoval.bind(this)}/>
-                <span> Balance: </span><span>{balance}</span>
+                <div className={balanceClass} ><span> Balance: </span><span>{balance}</span></div>
         </div>;
     }
 }
