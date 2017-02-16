@@ -13,6 +13,7 @@ import 'icons/ic_radio_button_checked_black_24px.svg';
 import 'icons/ic_radio_button_unchecked_black_24px.svg';
 import 'icons/ic_cancel_black_24px.svg';
 import 'icons/ic_clear_black_24px.svg';
+import 'icons/ic_search_black_24px.svg';
 
 render(
     <Router history={browserHistory}>
