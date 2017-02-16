@@ -15,8 +15,7 @@ export default class App extends React.Component {
         if (authData.access_token) {
             const sheetApi = createSheetApi({
                 token: authData.access_token,
-                range: 'A:E',
-                numberOfColumns: 5
+                range: 'A:Z'
             });
 
             this.setState({

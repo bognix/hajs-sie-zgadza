@@ -21,23 +21,27 @@ function getStore (sheetApi) {
                 spendings = [];
 
                 rawIncomes.forEach((income) => {
-                    incomes.push({
-                        name: income[0],
-                        price: income[1],
-                        category: income[2],
-                        date: income[3],
-                        type: 'income'
-                    });
+                    if (income[0] && income[1] && income[2] && income[3]) {
+                        incomes.push({
+                            name: income[0],
+                            price: income[1],
+                            category: income[2],
+                            date: income[3],
+                            type: 'income'
+                        });
+                    }
                 });
 
                 rawSpendings.forEach((spend) => {
-                    spendings.push({
-                        name: spend[0],
-                        price: spend[1],
-                        category: spend[2],
-                        date: spend[3],
-                        type: 'spend'
-                    });
+                    if (spend[0] && spend[1] && spend[2] && spend[3]) {
+                        spendings.push({
+                            name: spend[0],
+                            price: spend[1],
+                            category: spend[2],
+                            date: spend[3],
+                            type: 'spend'
+                        });
+                    }
                 });
 
                 resolve(incomes.concat(spendings));

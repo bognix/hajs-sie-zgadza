@@ -2,7 +2,7 @@ import random from 'utils/random';
 import sheetConfig from 'sheet.json';
 
 export default function create (params) {
-    const {token, range, numberOfColumns} = params,
+    const {token, range} = params,
         {spreadSheetId} = sheetConfig;
 
     let existingSheets = [];
@@ -152,10 +152,11 @@ export default function create (params) {
                 values.push(Object.values(entry));
             });
 
-            values.push(Array(numberOfColumns).
-                    fill(''));
-
             fetch(createRequest({
+                method: 'post',
+                path: `/values/${sheetID}!${range}:clear`
+            })).
+            then(() => fetch(createRequest({
                 method: 'post',
                 path: '/values:batchUpdate',
                 body: JSON.stringify({
@@ -166,17 +167,17 @@ export default function create (params) {
                     valueInputOption: "USER_ENTERED",
                     includeValuesInResponse: false
                 })
-            })).
-                    then((response) => {
-                        if (response.ok) {
-                            return response.json();
-                        }
+            }))).
+            then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
 
-                        return reject(response.status);
-                    }).
-                    catch((err) => {
-                        reject(err);
-                    });
+                return reject(response.status);
+            }).
+            catch((err) => {
+                reject(err);
+            });
         });
     }
 

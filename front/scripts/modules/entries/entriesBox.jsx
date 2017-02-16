@@ -1,4 +1,3 @@
-import Filter from 'modules/entries/filter';
 import List from 'modules/entries/list';
 import React from 'react';
 

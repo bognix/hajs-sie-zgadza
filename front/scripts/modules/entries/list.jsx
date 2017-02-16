@@ -1,7 +1,7 @@
 import random from 'utils/random';
 import React from 'react';
-import RowForm from 'modules/entries/rowForm';
 import ReactSVG from 'react-svg';
+import RowForm from 'modules/entries/rowForm';
 
 export default class EntriesList extends React.Component {
     getEntries () {
