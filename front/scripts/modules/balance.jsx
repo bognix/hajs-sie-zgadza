@@ -3,8 +3,8 @@ import EntriesBox from 'modules/entries/entriesBox';
 import Filter from 'modules/entries/filter';
 import plannerStore from 'store/planner';
 import React from 'react';
-import store from 'store/balance';
 import Spinner from 'modules/spinner';
+import store from 'store/balance';
 
 export default class Balance extends React.Component {
     constructor (props) {

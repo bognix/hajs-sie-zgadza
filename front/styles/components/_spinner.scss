@@ -60,8 +60,8 @@
 
 .spinner {
     position: absolute;
-    top: 50%;
-    right: 50%;
+    top: calc(50% - 48px);
+    right: calc(50% - 48px);
 
     svg {
       width: 48px;
@@ -69,6 +69,6 @@
 
       fill: $dollarGreen;
 
-      animation: dollarSpinner 0.8s linear infinite;
+      animation: dollarSpinner 1s linear infinite;
     }
 }

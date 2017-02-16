@@ -74,8 +74,10 @@ function getStore (sheetApi) {
         toAdd.forEach((entryToAdd) => {
             if (entryToAdd.type === 'spend') {
                 spendingsToAdd.push(entryToAdd);
+                spendings.push(entryToAdd);
             } else {
                 incomesToAdd.push(entryToAdd);
+                incomes.push(entryToAdd);
             }
         });
 
