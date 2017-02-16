@@ -19,9 +19,15 @@
 }
 
 .flex-table {
+    button {
+        background: none;
+        border: none;
+        padding: 0;
+    }
+
     tr {
         display: flex;
-        height: 2rem;
+        height: 3rem;
         align-items: center;
     }
 
@@ -42,7 +48,6 @@
 .text-input {
     font-size: 1rem;
     border: none;
-    border-bottom: 1px solid $secondaryDark;
     padding: 0;
     width: inherit;
     height: inherit;
@@ -52,16 +57,22 @@
     font-weight: 300;
 }
 
-.table-form td {
-    height: inherit;
+.table-form  {
+    border-bottom: 1px solid $secondaryDark;
+
+    td {
+        height: inherit;
+
+        input {
+            font-style: italic;
+            font-weight: 100;
+        }
+    }
 }
 
 .radio-input {
     align-items: center;
     width: 100px;
-
-    // border: 1px solid $primaryDark;
-    font-size: 1.2rem;
     flex-grow: 1;
     justify-content: center;
     cursor: pointer;
@@ -71,21 +82,20 @@
         position: absolute;
     }
 
-    &.type-income {
-        border: 1px solid $mediumGreen;
-        border-radius: 0 8px 8px 0;
+    svg, div {
+        width: 18px;
+        height: 18px;
+    }
 
-        &:hover, &.active {
-            background-color: $mediumGreen;
+    &.type-income {
+        svg {
+            fill: $mediumGreen;
         }
     }
 
     &.type-spend {
-        border-radius: 8px 0 0 8px;
-        border: 1px solid $mediumRed;
-
-        &:hover, &.active {
-            background-color: $mediumRed;
+        svg {
+            fill: $mediumRed;
         }
     }
 }
@@ -94,7 +104,27 @@
     border-bottom: 1px solid $lightGreen;
 
     &:hover {
-        background-color: $lightGreen;
+            border-bottom: 1px solid $dollarGreen;
+    }
+
+    button {
+        width: 2.5rem;
+        height: 2.5rem;
+        cursor: pointer;
+    }
+
+    div {
+        width: 24px;
+        height: 24px;
+        margin: auto;
+    }
+
+    button:hover {
+        border: 1px solid $mediumGreen;
+        border-radius: 30px;
+        svg {
+            fill: $dollarGreen;
+        }
     }
 }
 
@@ -102,6 +132,12 @@
     border-bottom: 1px solid $lightRed;
 
     &:hover {
-        background-color: $lightRed;
+        td {
+            background-color: $lightRed;
+        }
+
+        .last {
+            background: none;
+        }
     }
 }

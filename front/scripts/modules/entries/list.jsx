@@ -1,6 +1,7 @@
 import random from 'utils/random';
 import React from 'react';
 import RowForm from 'modules/entries/rowForm';
+import ReactSVG from 'react-svg';
 
 export default class EntriesList extends React.Component {
     getEntries () {
@@ -40,7 +41,8 @@ export default class EntriesList extends React.Component {
 
 export class Entry extends React.Component {
     render () {
-        const className = `type-${this.props.entry.type}`;
+        const className = `type-${this.props.entry.type}`,
+            removeButton = <ReactSVG path="/public/ic_clear_black_24px.svg"/>;
 
 
         return (
@@ -49,7 +51,7 @@ export class Entry extends React.Component {
                 <td>{this.props.entry.price}</td>
                 <td>{this.props.entry.category}</td>
                 <td>{this.props.entry.date}</td>
-                <td className="last"><button onClick={this.props.onEntryRemoval}>-</button></td>
+                <td className="last"><button onClick={this.props.onEntryRemoval}>{removeButton}</button></td>
             </tr>
         );
 

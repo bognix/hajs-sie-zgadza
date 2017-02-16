@@ -53,6 +53,9 @@ export default class EntryForm extends React.Component {
     }
 
     render () {
+        const radioIconChecked = <ReactSVG path="/public/ic_radio_button_checked_black_24px.svg" />;
+        const radioIconUnchecked = <ReactSVG path="/public/ic_radio_button_unchecked_black_24px.svg" />;
+
         return (
                     <tr className="table-form">
                         <td>
@@ -88,14 +91,18 @@ export default class EntryForm extends React.Component {
                                 type="radio"
                                 name="type"
                                 value="spend"
+                                checked={this.state.type === 'spend'}
                                 onChange={this.handleTypeChange.bind(this)}/>
+                                {this.state.type === 'spend' ? radioIconChecked : radioIconUnchecked}
                             <span className="label">Spend</span>
                             </label>
                             <label className="flex radio-input type-income"><input
                                 type="radio"
                                 name="type"
                                 value="income"
+                                checked={this.state.type === 'income'}
                                 onChange={this.handleTypeChange.bind(this)} />
+                            {this.state.type === 'income' ? radioIconChecked : radioIconUnchecked}
                             <span className="label">Income</span></label>
                             <button className="button-input" onClick={this.handleSubmit.bind(this)} type="submit"><ReactSVG path="/public/ic_add_black_24px.svg"/></button>
                         </td>
