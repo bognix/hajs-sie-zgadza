@@ -118,6 +118,8 @@ export default class Balance extends React.Component {
             visibleEntries
         } = this.calculateVisibleEntries();
 
+        const balanceClass = balance > 0 ? 'balance green' : 'balance red';
+
         return <div className="wrapper">
             <Filter
                 onInputValueChange={this.handleCategoryChange.bind(this)}
@@ -129,7 +131,7 @@ export default class Balance extends React.Component {
                     entries = {visibleEntries}
                     onEntrySubmit = {this.handleEntrySubmit.bind(this)}
                     onEntryRemoval = {this.handleEntryRemoval.bind(this)}/>
-                <span> Balance: </span><span>{balance}</span>
+                <div className={balanceClass} ><span> Balance: </span><span>{balance}</span></div>
                 <input type="button" value="Import Planned" onClick={this.handleImportPlannedClick.bind(this)}/>
         </div>;
     }

@@ -13,8 +13,8 @@
     }
 
     td {
-        width: 120px;
-        padding: 0;
+        width: 140px;
+        padding: 0 10px 0 0;
     }
 
     .first {
@@ -71,13 +71,14 @@
 
 .text-input {
     font-size: 1rem;
-    border: none;
-    padding: 0;
-    font-style: italic;
     font-weight: 300;
     color: $primaryDark;
 
+    width: inherit;
+    padding: inherit;
+
     &::-webkit-input-placeholder {
+        font-style: italic;
         font-weight: 100;
         color: $dark;
     }
@@ -90,12 +91,15 @@
 .radio-input {
     cursor: pointer;
     align-self: flex-start;
-    font-style: italic;
     color: $primaryDark;
 
     input {
         visibility: hidden;
         position: absolute;
+    }
+
+    .label {
+        padding-left: 5px;
     }
 
     svg, div {
@@ -113,5 +117,19 @@
         svg {
             fill: $mediumRed;
         }
+    }
+}
+
+.balance {
+    font-size: 1.4rem;
+    font-weight: 300;
+    margin: 10px;
+
+    &.green {
+        color: $dollarGreen;
+    }
+
+    &.red {
+        color: $darkRed;
     }
 }
