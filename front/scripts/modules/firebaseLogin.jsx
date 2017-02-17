@@ -7,7 +7,8 @@ export default class FirebaseLogin extends React.Component {
 
         this.state = {
             disabled: true,
-            loggedIn: false
+            loggedIn: false,
+            name
         };
     }
 
@@ -45,14 +46,18 @@ export default class FirebaseLogin extends React.Component {
 
         window.firebase.auth().signInWithPopup(provider).
         then((result) => {
-            const {accessToken} = result.credential;
+            const {accessToken} = result.credential,
+                {email, displayName} = result.user;
 
             this.setState({
-                loggedIn: true
+                loggedIn: true,
+                name: displayName
             });
 
             this.props.onSuccess({
-                access_token: accessToken
+                access_token: accessToken,
+                email,
+                name: displayName
             });
         }).
         catch((error) => {
@@ -62,7 +67,7 @@ export default class FirebaseLogin extends React.Component {
 
     getLink () {
         if (this.state.loggedIn) {
-            return <span>Welcome!</span>;
+            return <span>Welcome {this.state.name}!</span>;
         }
 
         return <input disabled={this.state.disabled}

@@ -1,6 +1,8 @@
 import createSheetApi from 'store/sheets/sheetApiFactory';
 import Navigation from 'modules/navigation';
+import userService from 'services/user';
 import React from 'react';
+import sheetService from 'services/sheets';
 
 export default class App extends React.Component {
     constructor (props) {
@@ -13,13 +15,23 @@ export default class App extends React.Component {
 
     handleSuccessfulLogin (authData) {
         if (authData.access_token) {
-            const sheetApi = createSheetApi({
-                token: authData.access_token,
-                range: 'A:Z'
-            });
+            userService.getUserSheet().then((spreadSheetId) => {
+                if (spreadSheetId) {
+                    const sheetApi = createSheetApi({
+                        token: authData.access_token,
+                        range: 'A:Z',
+                        spreadSheetId
+                    });
 
-            this.setState({
-                sheetApi
+                    this.setState({
+                        sheetApi
+                    });
+                } else {
+                    sheetService.createSpreadSheet(authData.access_token).
+                    then((data) => {
+                        userService.setUserSheet(data);
+                    });
+                }
             });
         } else {
             this.setState({

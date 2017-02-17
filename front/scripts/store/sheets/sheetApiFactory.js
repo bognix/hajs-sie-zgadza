@@ -1,37 +1,25 @@
 import random from 'utils/random';
+import sheetService from 'services/sheets';
 
 export default function create (params) {
-    const {token, range} = params;
-    let {spreadSheetId} = params, existingSheets = [];
+    const {token, range, spreadSheetId} = params;
+    let existingSheets = [];
 
     function createRequest ({
             method = 'get',
             path = '',
-            body = null,
-            overideSpreadSheetId = ''
+            body = null
         } = {}) {
-        const authHeader = `Bearer ${token}`,
-            requestConfig = {
-                method,
-                token,
-                headers: {
-                    'Content-Type': 'application/json; charset=UTF-8',
-                    'Authorization': authHeader
-                },
-                mode: 'cors',
-                cache: 'default'
-            };
 
-        if (body) {
-            requestConfig.body = body;
-        }
+        const requestConfig = {
+            method,
+            path,
+            spreadSheetId,
+            body,
+            token
+        };
 
-        if (overideSpreadSheetId !== '') {
-            spreadSheetId = overideSpreadSheetId;
-        }
-
-            // Path has to start with `/` if it's expected
-        return new Request(`https://sheets.googleapis.com/v4/spreadsheets/${spreadSheetId}${path}`, requestConfig);
+        return sheetService.createRequest(requestConfig);
     }
 
     function buildCreateSheetRequest (properties) {
@@ -97,13 +85,13 @@ export default function create (params) {
                         resolve(existingSheets);
                     });
         });
-
     }
 
     function getAll (sheetID) {
         return new Promise((resolve, reject) => {
 
-            getSheets().then(() => createSheet(sheetID)).
+            getSheets().
+            then(() => createSheet(sheetID)).
                 then(() => fetch(createRequest({
                     path: `/values/${sheetID}!${range}`
                 }))).
