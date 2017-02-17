@@ -1,4 +1,4 @@
-import GoogleLogin from 'modules/googleLogin';
+import FirebaseLogin from 'modules/firebaseLogin';
 import {Link} from 'react-router';
 import React from 'react';
 
@@ -15,7 +15,7 @@ export default class Navigation extends React.Component {
                     <Link to="/planner">Planner</Link>
                 </li>
                 <li className="nav-item">
-                    <GoogleLogin onSuccess={this.props.onLoginSuccess.bind(this)}/>
+                    <FirebaseLogin onSuccess={this.props.onLoginSuccess.bind(this)}/>
                 </li>
             </ul>
         </nav>);

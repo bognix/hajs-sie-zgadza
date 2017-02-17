@@ -1,16 +1,14 @@
 import random from 'utils/random';
-import sheetConfig from 'sheet.json';
 
 export default function create (params) {
-    const {token, range} = params,
-        {spreadSheetId} = sheetConfig;
-
-    let existingSheets = [];
+    const {token, range} = params;
+    let {spreadSheetId} = params, existingSheets = [];
 
     function createRequest ({
             method = 'get',
             path = '',
-            body = null
+            body = null,
+            overideSpreadSheetId = ''
         } = {}) {
         const authHeader = `Bearer ${token}`,
             requestConfig = {
@@ -26,6 +24,10 @@ export default function create (params) {
 
         if (body) {
             requestConfig.body = body;
+        }
+
+        if (overideSpreadSheetId !== '') {
+            spreadSheetId = overideSpreadSheetId;
         }
 
             // Path has to start with `/` if it's expected
