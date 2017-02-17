@@ -41,7 +41,7 @@ function createSpreadSheet (token) {
                 },
                 {
                     properties: {
-                        title: 'planned-spendins'
+                        title: 'planned-spendings'
                     }
                 }
             ]

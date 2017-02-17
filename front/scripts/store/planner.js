@@ -1,6 +1,6 @@
 import store from 'store/entries';
 
-const storeInstance = null;
+let createdStore = null;
 
 function getStore (sheetApi) {
     let incomes = [], spendings = [];
@@ -79,17 +79,19 @@ function getStore (sheetApi) {
         return allEntries;
     }
 
-    return {
+    createdStore = {
         add,
         getAll,
         remove
     };
 
+    return createdStore;
+
 }
 
 function getStoreInstance (...args) {
-    if (storeInstance) {
-        return storeInstance;
+    if (createdStore) {
+        return createdStore;
     }
 
     return getStore(...args);
