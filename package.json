@@ -35,7 +35,8 @@
     "dev": "npm run server & webpack-dev-server --progress --colors",
     "lint": "eslint .",
     "setup-lint": "eslint --init",
-    "server": "node server/app.js"
+    "server": "node server/app.js",
+    "start": "node server/app.js"
   },
   "repository": {
     "type": "git",
