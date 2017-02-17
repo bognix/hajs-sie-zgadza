@@ -1,21 +1,21 @@
-const express = require('express');
+var express = require('express');
 
-const router = express.Router();
+var router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', function(req, res) {
 
     res.render('index', {
         layout: false,
     });
 });
 
-router.get('/balance', (req, res) => {
+router.get('/balance', function(req, res) {
     res.render('index', {
         layout: false,
     });
 });
 
-router.get('/planner', (req, res) => {
+router.get('/planner', function(req, res) {
     res.render('index', {
         layout: false,
     });
