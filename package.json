@@ -1,8 +1,9 @@
 {
+<<<<<<< HEAD
   "name": "hajs-sie-zgadza",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server/app.js",
   "dependencies": {
     "express": "^4.14.0",
     "express-handlebars": "^3.0.0",
@@ -48,6 +49,7 @@
   },
   "homepage": "https://github.com/bognix/hajs-sie-zgadza#readme",
   "engines": {
-    "node": "6.9.4"
+    "node": ">= 0.6.0",
+    "npm": ">= 1.0.0"
   }
 }
