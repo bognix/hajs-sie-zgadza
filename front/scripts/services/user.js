@@ -5,7 +5,7 @@ function getUserSheet () {
     return new Promise((resolve, reject) => {
         db.ref(`users/${currentUser.uid}`).once('value').
         then((snapshot) => {
-            resolve(snapshot.val().spreadSheetId);
+            resolve(snapshot.val() && snapshot.val().spreadSheetId);
         }).
         catch((err) => {
             reject(err);

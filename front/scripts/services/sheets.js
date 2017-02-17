@@ -32,7 +32,19 @@ function createSpreadSheet (token) {
         body: JSON.stringify({
             properties: {
                 title: 'hajs-sie-zgadza'
-            }
+            },
+            sheets: [
+                {
+                    properties: {
+                        title: 'planned-incomes'
+                    }
+                },
+                {
+                    properties: {
+                        title: 'planned-spendins'
+                    }
+                }
+            ]
         }),
         token,
         path: ''

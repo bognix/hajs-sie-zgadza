@@ -30,6 +30,19 @@ export default class App extends React.Component {
                     sheetService.createSpreadSheet(authData.access_token).
                     then((data) => {
                         userService.setUserSheet(data);
+
+                        return data;
+                    }).
+                    then((createdSpreadSheetId) => {
+                        const sheetApi = createSheetApi({
+                            token: authData.access_token,
+                            range: 'A:Z',
+                            spreadSheetId: createdSpreadSheetId
+                        });
+
+                        this.setState({
+                            sheetApi
+                        });
                     });
                 }
             });
