@@ -1,6 +1,7 @@
 import EntriesBox from 'modules/entries/entriesBox';
 import React from 'react';
 import store from 'store/planner';
+import Spinner from 'modules/spinner';
 
 export default class Planner extends React.Component {
     constructor (props) {
@@ -9,7 +10,8 @@ export default class Planner extends React.Component {
         this.state = {
             entries: [],
             category: '',
-            selectedDate: ''
+            selectedDate: '',
+            loaded: false
         };
     }
 
@@ -57,7 +59,10 @@ export default class Planner extends React.Component {
         if (sheetApi) {
             store.getStoreInstance(sheetApi).getAll().
                 then((entries) => {
-                    this.setState({entries});
+                    this.setState({
+                        entries,
+                        loaded: true}
+                    );
                 }).
                 catch(() => {
                     // TODO notification about failed fetch
@@ -69,11 +74,13 @@ export default class Planner extends React.Component {
     }
 
     render () {
-        const balance = this.calculateBalance();
-        const balanceClass = balance > 0 ? 'balance green' : 'balance red';
+        const balance = this.calculateBalance(),
+            balanceClass = balance > 0 ? 'balance green' : 'balance red',
+            className = this.state.loaded ? 'wrapper' : 'loading wrapper';
 
-        return <div className="wrapper">
+        return <div className={className}>
             <h2>Planned Expenses</h2>
+            <Spinner visible={!this.state.loaded}/>
             <EntriesBox
                     entries = {this.state.entries}
                     onEntrySubmit = {this.handleEntrySubmit.bind(this)}
