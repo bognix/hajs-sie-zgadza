@@ -61,7 +61,7 @@ function getStore (sheetApi) {
             incomes.push(toAdd);
         }
 
-        const sheetID = `${date.getMonthYear(new Date())}-${sheetSuffix}`;
+        toAdd.price = Math.round(parseFloat(toAdd.price.toString().replace(/,/, '.')) * 100) / 100; const sheetID = `${date.getMonthYear(new Date())}-${sheetSuffix}`;
 
         store.add(sheetApi, sheetID, toAdd);
 

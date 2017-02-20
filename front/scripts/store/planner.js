@@ -55,6 +55,8 @@ function getStore (sheetApi) {
             incomes.push(toAdd);
         }
 
+        toAdd.price = Math.round(parseFloat(toAdd.price.toString().replace(/,/, '.')) * 100) / 100;
+
         store.add(sheetApi, sheetID, toAdd);
         allEntries.push(toAdd);
 
