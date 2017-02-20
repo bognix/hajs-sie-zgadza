@@ -1,6 +1,7 @@
 import date from 'utils/date';
 import EntriesBox from 'modules/entries/entriesBox';
 import Filter from 'modules/entries/filter';
+import {formatPrice} from 'utils/price';
 import plannerStore from 'store/planner';
 import React from 'react';
 import Spinner from 'modules/spinner';
@@ -120,14 +121,14 @@ export default class Balance extends React.Component {
         allEntries.forEach((entry) => {
             if (!this.state.category || entry.category.indexOf(this.state.category) === 0) {
                 balance = entry.type === 'spend'
-                    ? balance -= Math.round(parseFloat(entry.price.toString().replace(/,/, '.')) * 100) / 100 || 0
-                    : balance += Math.round(parseFloat(entry.price.toString().replace(/,/, '.')) * 100) / 100 || 0;
+                    ? balance -= formatPrice(entry.price)
+                    : balance += formatPrice(entry.price);
                 visibleEntries.push(entry);
             }
         });
 
         return {
-            balance: Math.round(parseFloat(balance) * 100) / 100,
+            balance: formatPrice(balance),
             visibleEntries
         };
     }

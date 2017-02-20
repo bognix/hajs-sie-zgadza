@@ -1,3 +1,4 @@
+import {formatPrice} from 'utils/price';
 import store from 'store/entries';
 
 let createdStore = null;
@@ -55,7 +56,7 @@ function getStore (sheetApi) {
             incomes.push(toAdd);
         }
 
-        toAdd.price = Math.round(parseFloat(toAdd.price.toString().replace(/,/, '.')) * 100) / 100;
+        toAdd.price = formatPrice(toAdd.price);
 
         store.add(sheetApi, sheetID, toAdd);
         allEntries.push(toAdd);

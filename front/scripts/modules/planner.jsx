@@ -1,4 +1,5 @@
 import EntriesBox from 'modules/entries/entriesBox';
+import {formatPrice} from 'utils/price';
 import React from 'react';
 import Spinner from 'modules/spinner';
 import store from 'store/planner';
@@ -40,8 +41,8 @@ export default class Planner extends React.Component {
 
         this.state.entries.forEach((entry) => {
             balance = entry.type === 'spend'
-            ? balance -= Math.round(parseFloat(entry.price.toString().replace(/,/, '.')) * 100) / 100 || 0
-            : balance += Math.round(parseFloat(entry.price.toString().replace(/,/, '.')) * 100) / 100 || 0;
+            ? balance -= formatPrice(entry.price)
+            : balance += formatPrice(entry.price);
         });
 
         return Math.round(parseFloat(balance) * 100) / 100;

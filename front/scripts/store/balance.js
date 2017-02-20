@@ -1,4 +1,5 @@
 import date from 'utils/date';
+import {formatPrice} from 'utils/price';
 import store from 'store/entries';
 
 let createdStore = null;
@@ -61,7 +62,9 @@ function getStore (sheetApi) {
             incomes.push(toAdd);
         }
 
-        toAdd.price = Math.round(parseFloat(toAdd.price.toString().replace(/,/, '.')) * 100) / 100; const sheetID = `${date.getMonthYear(new Date())}-${sheetSuffix}`;
+        toAdd.price = formatPrice(toAdd.price);
+
+        const sheetID = `${date.getMonthYear(new Date())}-${sheetSuffix}`;
 
         store.add(sheetApi, sheetID, toAdd);
 
