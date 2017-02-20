@@ -120,8 +120,8 @@ export default class Balance extends React.Component {
         allEntries.forEach((entry) => {
             if (!this.state.category || entry.category.indexOf(this.state.category) === 0) {
                 balance = entry.type === 'spend'
-                    ? balance -= Math.round(parseFloat(entry.price) * 100) / 100 || 0
-                    : balance += Math.round(parseFloat(entry.price) * 100) / 100 || 0;
+                    ? balance -= Math.round(parseFloat(entry.price.toString().replace(/,/, '.')) * 100) / 100 || 0
+                    : balance += Math.round(parseFloat(entry.price.toString().replace(/,/, '.')) * 100) / 100 || 0;
                 visibleEntries.push(entry);
             }
         });
