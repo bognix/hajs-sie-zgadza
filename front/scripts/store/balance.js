@@ -64,7 +64,7 @@ function getStore (sheetApi) {
 
         toAdd.price = formatPrice(toAdd.price);
 
-        const sheetID = `${date.getMonthYear(new Date())}-${sheetSuffix}`;
+        const sheetID = `${date.getMonthYear(new Date(toAdd.date))}-${sheetSuffix}`;
 
         store.add(sheetApi, sheetID, toAdd);
 
@@ -73,12 +73,14 @@ function getStore (sheetApi) {
         return allEntries;
     }
 
-    function addMany (allEntries, toAdd) {
+    function addMany (allEntries, toAdd, entryDate) {
         const incomesToAdd = [], spendingsToAdd = [],
-            incomesSheetID = `${date.getMonthYear(new Date())}-incomes`,
-            spendingsSheetID = `${date.getMonthYear(new Date())}-spendings`;
+            incomesSheetID = `${date.getMonthYear(new Date(entryDate))}-incomes`,
+            spendingsSheetID = `${date.getMonthYear(new Date(entryDate))}-spendings`;
 
         toAdd.forEach((entryToAdd) => {
+            entryToAdd.date = entryDate;
+
             if (entryToAdd.type === 'spend') {
                 spendingsToAdd.push(entryToAdd);
                 spendings.push(entryToAdd);

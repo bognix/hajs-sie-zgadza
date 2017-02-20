@@ -52,7 +52,7 @@ export class Entry extends React.Component {
                 <td>{this.props.entry.name}</td>
                 <td>{this.props.entry.price}</td>
                 <td>{this.props.entry.category}</td>
-                <td>{this.props.entry.date}</td>
+                <td>{new Date(this.props.entry.date).toLocaleDateString()}</td>
                 <td className="last"><button onClick={this.props.onEntryRemoval}>{removeButton}</button></td>
             </tr>
         );

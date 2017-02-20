@@ -17,9 +17,9 @@ function formatDate (dateObject) {
 }
 
 function filterToday (allEntries) {
-    const todayString = new Date().toDateString(),
+    const todayString = new Date().toLocaleDateString(),
         todayEntries = allEntries.filter(
-            (entry) => new Date(entry.date).toDateString() === todayString);
+            (entry) => new Date(entry.date).toLocaleDateString() === todayString);
 
     return todayEntries;
 }
@@ -61,5 +61,6 @@ export default {
     formatDate,
     filterToday,
     subtractMonth,
-    addMonth
+    addMonth,
+    createDateBaseOnMothYear
 };

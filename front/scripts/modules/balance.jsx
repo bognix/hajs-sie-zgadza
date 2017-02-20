@@ -107,8 +107,10 @@ export default class Balance extends React.Component {
 
         plannerStore.getStoreInstance(this.props.sheetApi).getAll().
         then((plannedEntries) => {
+            const datePrefix = date.createDateBaseOnMothYear(this.state.selectedDate);
+
             this.setState({
-                entries: store.getStoreInstance().addMany(this.state.entries, plannedEntries),
+                entries: store.getStoreInstance().addMany(this.state.entries, plannedEntries, datePrefix),
                 loaded: true
             });
         });
