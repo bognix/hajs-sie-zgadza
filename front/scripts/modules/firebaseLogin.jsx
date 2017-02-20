@@ -1,4 +1,4 @@
-import authConfig from 'auth.json';
+import {auth} from 'auth';
 import React from 'react';
 
 export default class FirebaseLogin extends React.Component {
@@ -18,7 +18,7 @@ export default class FirebaseLogin extends React.Component {
         scriptElement.src = '//www.gstatic.com/firebasejs/3.6.9/firebase.js';
         scriptElement.async = true;
         scriptElement.onload = () => {
-            const {apiKey, authDomain, databaseURL, storageBucket, messagingSenderId} = authConfig.firebase,
+            const {apiKey, authDomain, databaseURL, storageBucket, messagingSenderId} = auth.firebase,
                 config = {
                     apiKey,
                     authDomain,

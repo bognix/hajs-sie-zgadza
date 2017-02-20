@@ -1,4 +1,4 @@
-import authConfig from 'auth.json';
+import {auth} from 'auth.json';
 import React from 'react';
 
 export default class LoginControl extends React.Component {
@@ -27,7 +27,7 @@ export default class LoginControl extends React.Component {
                 });
 
                 window.gapi.auth2.init({
-                    client_id: authConfig.googleAuth.clientId,
+                    client_id: auth.googleAuth.clientId,
                     scope: 'profile email https://www.googleapis.com/auth/spreadsheets'
                 });
 

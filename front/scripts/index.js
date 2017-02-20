@@ -17,6 +17,8 @@ import 'icons/ic_search_black_24px.svg';
 import 'icons/ic_file_download_black_24px.svg';
 import 'icons/ic_attach_money_black_24px.svg';
 
+var x = process.env.DUPA;
+
 render(
     <Router history={browserHistory}>
     <Route path="/" component={App}>
